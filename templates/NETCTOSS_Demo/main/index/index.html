@@ -1,0 +1,9 @@
+{% extends 'base_main.html' %}
+
+{% load static %}
+
+{% block ext_js %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="{% static 'NETCTOSS_Demo/main/index/js/index.js' %}"></script>
+{% endblock %}
