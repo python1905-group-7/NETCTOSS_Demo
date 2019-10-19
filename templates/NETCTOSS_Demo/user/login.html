@@ -5,31 +5,34 @@
 {% block content %}
     <div class="index">
         <div class="login_box">
-            <table>
-                <tr>
-                    <td class="login_info">账号：</td>
-                    <td colspan="2"><input name="" type="text" class="width150"/></td>
-                    <td class="login_error_info"><span class="required">30长度的字母、数字和下划线</span></td>
-                </tr>
-                <tr>
-                    <td class="login_info">密码：</td>
-                    <td colspan="2"><input name="" type="password" class="width150"/></td>
-                    <td><span class="required">30长度的字母、数字和下划线</span></td>
-                </tr>
-                <tr>
-                    <td class="login_info">验证码：</td>
-                    <td class="width70"><input name="" type="text" class="width70"/></td>
-                    <td><img src="{% static 'images/valicode.jpg' %}" alt="验证码" title="点击更换"/></td>
-                    <td><span class="required">验证码错误</span></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td class="login_button" colspan="2">
-                        <a href="index.html"><img src="{% static 'images/login_btn.png' %}"/></a>
-                    </td>
-                    <td><span class="required">用户名或密码错误，请重试</span></td>
-                </tr>
-            </table>
+            <form name="login" action="{% url 'login:login' %}" method="post">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td class="login_info">账号：</td>
+                        <td colspan="2"><input id="username" name="username" type="text" class="width150"/></td>
+                        <td class="login_error_info"><span class="required">{{ username_error_info }}</span></td>
+                    </tr>
+                    <tr>
+                        <td class="login_info">密码：</td>
+                        <td colspan="2"><input id="password" name="password" type="password" class="width150"/></td>
+                        <td><span class="required">{{ password_error_info }}</span></td>
+                    </tr>
+                    <tr>
+                        <td class="login_info">验证码：</td>
+                        <td class="width70"><input id="valicode" name="valicode" type="text" class="width70"/></td>
+                        <td><img id="changeImage" src="{% url 'login:get_code' %}" alt="验证码" title="点击更换"/></td>
+                        <td><span class="required">{{ valicode_error_info }}</span></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="login_button" colspan="2">
+                            <img src="{% static 'images/login_btn.png' %}" onclick="document:login.submit();"/>
+                       </td>
+                        <td><span class="required"></span></td>
+                    </tr>
+                </table>
+            </form>
         </div>
     </div>
 {% endblock %}
@@ -37,7 +40,5 @@
 {% block ext_js %}
     {{ block.super }}
 
-    <script type="text/javascript">
-        document.getElementsByTagName('body')[0].className = 'index';
-    </script>
+    <script type="text/javascript" src="{% static 'NETCTOSS_Demo/user/js/login.js' %}"></script>
 {% endblock %}
