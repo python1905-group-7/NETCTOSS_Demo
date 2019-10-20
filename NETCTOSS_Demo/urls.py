@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^test/', include('TestApp.urls')),
     url(r'^login/', include('LoginApp.urls', namespace='login')),
+    url(r'^account/', include('AccountApp.urls', namespace='account')),
 ]

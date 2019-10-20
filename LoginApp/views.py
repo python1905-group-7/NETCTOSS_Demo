@@ -35,7 +35,7 @@ def login(request):
                 if password == user.password:
                     request.session['user_id'] = user.id
 
-                    return redirect(reverse('login:index', context={'user': user}))
+                    return redirect(reverse('login:index'))
                 else:
                     context['password_error_info'] = '密码错误!'
             else:
@@ -44,11 +44,6 @@ def login(request):
             context['valicode_error_info'] = '验证码错误!'
 
         return render(request, 'NETCTOSS_Demo/user/login.html', context=context)
-
-
-def logout(request):
-    request.session.flush()
-    return redirect(reverse('login:login'))
 
 
 def index(request):

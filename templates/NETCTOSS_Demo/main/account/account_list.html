@@ -43,7 +43,7 @@
                     </tr>
                     <tr>
                         <td>1</td>
-                        <td><a href="{% url 'account:account_detail' %}">贾强</a></td>
+                        <td class="real_name">zhangsanfeng</td>
                         <td>230102197902137862</td>
                         <td>jiaqiang</td>
                         <td>开通</td>
@@ -51,14 +51,13 @@
                         <td>2013-02-23 00:00:00</td>
                         <td class="td_modi">
                             <input type="button" value="暂停" class="btn_pause" onclick="setState();"/>
-                            <input type="button" value="修改" class="btn_modify"
-                                   onclick="location.href='/account/account_modi/';"/>
+                            <input type="button" value="修改" class="btn_modify"/>
                             <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
                         </td>
                     </tr>
                     <tr>
                         <td>2</td>
-                        <td><a href="{% url 'account:account_detail' %}">贾强</a></td>
+                        <td class="real_name">贾强</td>
                         <td>230102197902137862</td>
                         <td>jiaqiang</td>
                         <td>暂停</td>
@@ -66,14 +65,13 @@
                         <td>2013-02-23 00:00:00</td>
                         <td class="td_modi">
                             <input type="button" value="开通" class="btn_start" onclick="setState();"/>
-                            <input type="button" value="修改" class="btn_modify"
-                                   onclick="location.href='/account/account_modi/';"/>
+                            <input type="button" value="修改" class="btn_modify"/>
                             <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
                         </td>
                     </tr>
                     <tr>
                         <td>3</td>
-                        <td><a href="{% url 'account:account_detail' %}">贾强</a></td>
+                        <td class="real_name">贾强</td>
                         <td>230102197902137862</td>
                         <td>jiaqiang</td>
                         <td>删除</td>
@@ -84,7 +82,7 @@
                     </tr>
                     <tr>
                         <td>4</td>
-                        <td><a href="{% url 'account:account_detail' %}">贾强</a></td>
+                        <td class="real_name">贾强</td>
                         <td>230102197902137862</td>
                         <td>jiaqiang</td>
                         <td>开通</td>
@@ -92,14 +90,13 @@
                         <td>2013-02-23 00:00:00</td>
                         <td class="td_modi">
                             <input type="button" value="暂停" class="btn_pause" onclick="setState();"/>
-                            <input type="button" value="修改" class="btn_modify"
-                                   onclick="location.href='/account/account_modi/';"/>
+                            <input type="button" value="修改" class="btn_modify"/>
                             <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
                         </td>
                     </tr>
                     <tr>
                         <td>5</td>
-                        <td><a href="{% url 'account:account_detail' %}">贾强</a></td>
+                        <td class="real_name">贾强</td>
                         <td>230102197902137862</td>
                         <td>jiaqiang</td>
                         <td>暂停</td>
@@ -107,8 +104,7 @@
                         <td>2013-02-23 00:00:00</td>
                         <td class="td_modi">
                             <input type="button" value="开通" class="btn_start" onclick="setState();"/>
-                            <input type="button" value="修改" class="btn_modify"
-                                   onclick="location.href='/account/account_modi/';"/>
+                            <input type="button" value="修改" class="btn_modify"/>
                             <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
                         </td>
                     </tr>
@@ -146,6 +142,8 @@
 {% endblock %}
 
 {% block ext_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'NETCTOSS_Demo/main/account/js/account_list.js' %}"></script>
     <script language="javascript" type="text/javascript">
         //删除
         function deleteAccount() {

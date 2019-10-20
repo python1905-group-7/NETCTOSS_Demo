@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'TestApp.apps.TestappConfig',
     'LoginApp.apps.LoginappConfig',
+    'AccountApp',
+    'FeeApp',
 ]
 
 MIDDLEWARE = [
@@ -49,7 +51,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'middleware.middleware.LoginMiddleware'
 ]
 
 ROOT_URLCONF = 'NETCTOSS_Demo.urls'
