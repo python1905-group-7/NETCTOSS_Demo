@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'TestApp.apps.TestappConfig',
     'LoginApp.apps.LoginappConfig',
+    'FeeApp.apps.FeeappConfig'
 ]
 
 MIDDLEWARE = [
