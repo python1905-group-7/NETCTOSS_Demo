@@ -10,7 +10,8 @@ LOGIN_REQUEST = [
 ]
 
 LOGIN_REQUEST_JSON = [
-    '/login/get_user/'
+    '/login/get_user/',
+    '/fee/get_cost_list/'
 ]
 
 

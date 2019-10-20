@@ -171,6 +171,15 @@ div.save_success {
     background-position: 10px center;
 }
 
+div.save_error {
+    background-color: #fbf0db;
+    border: 1px solid #ff9000;
+    color: #af6606;
+    background-image: url(../images/delete.png);
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
 div.save_fail {
     background-color: #fbf0db;
     border: 1px solid #ff9000;
@@ -186,6 +195,15 @@ div.operate_success {
     border: 1px solid #f57676;
     color: #af6606;
     background-image: url(../images/ok.png);
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+div.operate_error {
+    background-color: #fdecec;
+    border: 1px solid #f57676;
+    color: #af6606;
+    background-image: url(../images/delete.png);
     background-repeat: no-repeat;
     background-position: 10px center;
 }

@@ -35,6 +35,9 @@ function set_datalist(data) {
 
     for (let i = (page_num - 1) * page_size; i < page_num * page_size; i++) {
         if (data[i]) {
+            let btns = '<input type="button" value="启用" class="btn_start" onclick="startFee(' + i + ', ' + data[i]['id'] + ');"/>\n' +
+                '<input type="button" value="修改" class="btn_modify" onclick="location.href=\'fee_modi.html\';"/>\n' +
+                '<input type="button" value="删除" class="btn_delete" onclick="deleteFee(' + i + ', ' + data[i]['id'] + ');"/>\n';
             trs += '<tr>\n' +
                 '<td>' + data[i]['id'] + '</td>\n' +
                 '<td><a href="fee_detail.html">' + data[i]['name'] + '</a></td>\n' +
@@ -43,11 +46,9 @@ function set_datalist(data) {
                 '<td>' + (data[i]['unit_cost'] ? data[i]['unit_cost'] + ' 元/小时' : '') + '</td>\n' +
                 '<td>' + data[i]['creatime'] + '</td>\n' +
                 '<td>' + (data[i]['startime'] ? data[i]['startime'] : '') + '</td>\n' +
-                '<td>暂停</td>\n' +
+                '<td>' + (data[i]['status'] ? '开通' : data[i]['status'] == null ? '删除' : '暂停') + '</td>\n' +
                 '<td>\n' +
-                '<input type="button" value="启用" class="btn_start" onclick="startFee();"/>\n' +
-                '<input type="button" value="修改" class="btn_modify" onclick="location.href=\'fee_modi.html\';"/>\n' +
-                '<input type="button" value="删除" class="btn_delete" onclick="deleteFee();"/>\n' +
+                (data[i]['status'] ? '' : data[i]['status'] == null ? '' : btns) +
                 '</td>\n' +
                 '</tr>'
         }
@@ -125,12 +126,6 @@ function sort(btnObj, code) {
 
     let len = cost_list.length;
 
-    for (let i = 0; i < len; i++) {
-        if (cost_list[i][code] === null) {
-            cost_list[i][code] = 0;
-        }
-    }
-
     if (btnObj.className === "sort_desc") {
         btnObj.className = "sort_asc";
         for (let i = 0; i < len - 1; i++) {
@@ -156,23 +151,47 @@ function sort(btnObj, code) {
         }
     }
 
-    for (let i = 0; i < len; i++) {
-        if (cost_list[i][code] === 0) {
-            cost_list[i][code] = null;
-        }
-    }
-
     set_datalist(cost_list);
 }
 
 //启用
-function startFee() {
+function startFee(sub_num, cost_id) {
     let r = window.confirm("确定要启用此资费吗？资费启用后将不能修改和删除。");
-    document.getElementById("operate_result_info").style.display = "block";
+    if (r) {
+        $.get(
+            '/fee/update_to_cost_status/',
+            {'cost_id': cost_id},
+            function (data) {
+                if (data['status'] === 200) {
+                    cost_list[sub_num]['status'] = true;
+                    cost_list[sub_num]['startime'] = data['data'];
+                    set_datalist(cost_list);
+                    document.getElementsByClassName("save_success")[0].style.display = "block";
+                } else {
+                    document.getElementsByClassName("save_error")[0].style.display = "block";
+                }
+            }
+        )
+
+    }
 }
 
 //删除
-function deleteFee() {
+function deleteFee(sub_num, cost_id) {
     let r = window.confirm("确定要删除此资费吗？");
-    document.getElementById("operate_result_info").style.display = "block";
+    if (r) {
+        $.get(
+            '/fee/delete_to_cost/',
+            {'cost_id': cost_id},
+            function (data) {
+                if (data['status'] === 200) {
+                    cost_list[sub_num]['status'] = null;
+                    set_datalist(cost_list);
+                    document.getElementsByClassName("operate_success")[0].style.display = "block";
+                } else {
+                    document.getElementsByClassName("operate_error")[0].style.display = "block";
+                }
+            }
+        )
+    }
 }

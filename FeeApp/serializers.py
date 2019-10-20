@@ -4,17 +4,9 @@ from FeeApp.models import Cost
 
 
 class CostSerializers(serializers.ModelSerializer):
+    creatime = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M')
+    startime = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M')
+
     class Meta:
         model = Cost
-        fields = [
-            'id',
-            'name',
-            'base_duration',
-            'base_cost',
-            'unit_cost',
-            'status',
-            'descr',
-            'creatime',
-            'startime',
-            'cost_type'
-        ]
+        fields = '__all__'

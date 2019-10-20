@@ -46,9 +46,21 @@
             <input type="button" value="增加" class="btn_add" onclick="location.href='fee_add.html';"/>
         </div>
         <!--启用操作的操作提示-->
+        <div id="save_result_info" class="save_success">
+            <img src="/static/images/close.png" onclick="this.parentNode.style.display='none';"/>
+            启用成功！
+        </div>
+        <div id="save_result_info" class="save_error">
+            <img src="/static/images/close.png" onclick="this.parentNode.style.display='none';"/>
+            启用失败！
+        </div>
         <div id="operate_result_info" class="operate_success">
             <img src="/static/images/close.png" onclick="this.parentNode.style.display='none';"/>
             删除成功！
+        </div>
+        <div id="operate_result_info" class="operate_error">
+            <img src="/static/images/close.png" onclick="this.parentNode.style.display='none';"/>
+            删除失败！
         </div>
         <!--数据区域：用表格展示数据-->
         <div id="data">
