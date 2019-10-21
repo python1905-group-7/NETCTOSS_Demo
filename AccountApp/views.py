@@ -24,7 +24,7 @@ def judge(res):
 
 def check_name(request):
     name = request.GET.get('name')
-    res = re.match(r'[\u4e00-\u9fa5a-zA-Z0-9]{1,20}$', name)
+    res = re.match(r'[\u4e00-\u9fa5a-zA-Z]{1,20}$', name)
     flag = judge(res)
     return JsonResponse({'flag': flag})
 
@@ -47,7 +47,7 @@ def check_account(request):
 def check_old_pwd(request):
     o_pwd = request.GET.get('o_pwd')
     a_id = int(request.GET.get('a_id'))
-    pwd = Account.objects.get(pk=a_id)
+    pwd = Account.objects.get(pk=a_id).login_passwd
     flag = o_pwd == pwd
     return JsonResponse({'flag': flag})
 
@@ -82,7 +82,7 @@ def check_email(request):
 
 def check_mailaddress(request):
     mailaddress = request.GET.get('mailaddress')
-    res = re.match(r'\d{1,50}$', mailaddress)
+    res = re.match(r'^[A-Za-z0-9\u4e00-\u9fa5]{1,50}$', mailaddress)
     flag = judge(res)
     return JsonResponse({'flag': flag})
 
@@ -128,6 +128,50 @@ def account_modi(request):
 
 
 def save_modifications(request):
+    a_id = int(request.GET.get('a_id'))
+    name = request.GET.get('name')
+    pwd = request.GET.get('pwd')
+    tel = request.GET.get('tel')
+    identity = request.GET.get('identity')
+    email = request.GET.get('email')
+    mailaddress = request.GET.get('mailaddress')
+    zipcode = request.GET.get('zipcode')
+    qq = request.GET.get('qq')
+
+    if email == '0':
+        email = None
+    if mailaddress == '0':
+        mailaddress = None
+    if zipcode == '0':
+        zipcode = None
+    if qq == '0':
+        qq = None
+
+    account = Account.objects.get(pk=a_id)
+    account.real_name = name
+    account.telephone = tel
+    account.email = email
+    account.mailaddress = mailaddress
+    account.zipcode = zipcode
+    account.qq = qq
+
+    if pwd != '0':
+        account.login_passwd = pwd
+
+    if identity == '0':
+        identity = None
+    else:
+        recommender = Recommender.objects.filter(idcard_no=identity)
+        if recommender.count() > 0:
+            account.recommender_id = recommender[0].id
+        else:
+            r_object = Recommender()
+            r_object.idcard_no = identity
+            r_object.save()
+            account.recommender_id = r_object.id
+
+    account.save()
+
     return JsonResponse({})
 
 

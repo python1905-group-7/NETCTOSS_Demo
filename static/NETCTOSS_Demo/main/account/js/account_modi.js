@@ -73,7 +73,7 @@ $('#check_new_pwd').blur(function () {
             }
         );
     }
-    if ($('#confirm_pwd').val()) {
+    if ($('#confirm_pwd').val() === '') {
         var c_pwd = $('#confirm_pwd').val();
         $.getJSON(
             '/account/confirm_pwd/',
@@ -91,21 +91,21 @@ $('#check_new_pwd').blur(function () {
 });
 
 $('#confirm_pwd').blur(function () {
-    var pwd = $('#check_pwd').val();
+    var pwd = $('#check_new_pwd').val();
     var c_pwd = $(this).val();
     if (pwd === '' && c_pwd === '') {
         flag4 = true;
-        $('#cpwd_info').html('');
+        $('#c_pwd_info').html('');
     } else {
         $.getJSON(
             '/account/confirm_pwd/',
             {'pwd': pwd, 'c_pwd': c_pwd},
             function (data) {
                 if (data['flag']) {
-                    $('#cpwd_info').html('');
+                    $('#c_pwd_info').html('');
                     flag4 = true;
                 } else {
-                    $('#cpwd_info').html('两次密码不一致').css('color', 'red');
+                    $('#c_pwd_info').html('两次密码不一致').css('color', 'red');
                     flag4 = false;
                 }
             })
@@ -166,7 +166,7 @@ $('#check_email').blur(function () {
                     $('#email_info').html('');
                     flag7 = true;
                 } else {
-                    $('#email_info').html('身份证号格式不正确').css('color', 'red');
+                    $('#email_info').html('邮箱格式不正确').css('color', 'red');
                     flag7 = false;
                 }
             }
@@ -188,7 +188,7 @@ $('#check_mailaddress').blur(function () {
                     $('#mailaddress_info').html('');
                     flag8 = true;
                 } else {
-                    $('#mailaddress_info').html('身份证号格式不正确').css('color', 'red');
+                    $('#mailaddress_info').html('邮箱地址格式不正确').css('color', 'red');
                     flag8 = false;
                 }
             }
@@ -210,7 +210,7 @@ $('#check_zipcode').blur(function () {
                     $('#zipcode_info').html('');
                     flag9 = true;
                 } else {
-                    $('#zipcode_info').html('身份证号格式不正确').css('color', 'red');
+                    $('#zipcode_info').html('邮编格式不正确').css('color', 'red');
                     flag9 = false;
                 }
             }
@@ -232,7 +232,7 @@ $('#check_qq').blur(function () {
                     $('#qq_info').html('');
                     flag10 = true;
                 } else {
-                    $('#qq_info').html('身份证号格式不正确').css('color', 'red');
+                    $('#qq_info').html('QQ号格式不正确').css('color', 'red');
                     flag10 = false;
                 }
             }
@@ -240,13 +240,12 @@ $('#check_qq').blur(function () {
     }
 });
 
-//保存成功的提示信息
 function save_modification() {
     var flag = flag1 && flag2 && flag3 && flag4 && flag5 && flag6 && flag7 && flag8 && flag9 && flag10;
     if (flag) {
         var a_id = $('#account_id').val();
         var name = $('#check_name').val();
-        var pwd = $('#check_pwd').val();
+        var pwd = $('#check_new_pwd').val();
         var tel = $('#check_tel').val();
         var identity = $('#check_r_identity').val();
         var email = $('#check_email').val();
@@ -254,6 +253,7 @@ function save_modification() {
         var zipcode = $('#check_zipcode').val();
         var qq = $('#check_qq').val();
 
+        if (pwd === '') pwd = '0';
         if (identity === '') identity = '0';
         if (email === '') email = '0';
         if (mailaddress === '') mailaddress = '0';
@@ -274,21 +274,24 @@ function save_modification() {
                 'qq': qq
             },
             function () {
-
+                location.href = '/account/account_list/'
             }
         )
+    } else {
+        showResult()
     }
+}
 
-    function showResult() {
-        showResultDiv(true);
-        window.setTimeout("showResultDiv(false);", 5000);
-    }
+//保存成功的提示信息
+function showResult() {
+    showResultDiv(true);
+    window.setTimeout("showResultDiv(false);", 5000);
+}
 
-    function showResultDiv(flag) {
-        var divResult = document.getElementById("save_result_info");
-        if (flag)
-            divResult.style.display = "block";
-        else
-            divResult.style.display = "none";
-    }
+function showResultDiv(flag) {
+    var divResult = document.getElementById("save_result_info");
+    if (flag)
+        divResult.style.display = "block";
+    else
+        divResult.style.display = "none";
 }
