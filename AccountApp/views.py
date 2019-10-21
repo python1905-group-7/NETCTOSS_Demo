@@ -1,16 +1,13 @@
 import re
-
-from django.contrib.auth.hashers import make_password
 import datetime
 
-from django.core.paginator import Paginator
+from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.core.paginator import Paginator
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
-# Create your views here.
-
-
-from AccountApp.models import Account
+from AccountApp.models import Account, Recommender
 
 
 def judge_status(status, accounts):
@@ -27,10 +24,7 @@ def judge_identity(idcard, accounts):
 def judge_name(real_name, accounts):
     account = accounts.filter(real_name=real_name)
     return account
-from django.shortcuts import render, redirect
-from django.urls import reverse
 
-from AccountApp.models import Account, Recommender
 
 def judge_login_name(login_name, accounts):
     account = accounts.filter(login_name=login_name)
@@ -38,7 +32,6 @@ def judge_login_name(login_name, accounts):
 
 
 def account_list(request):
-    return render(request, 'NETCTOSS_Demo/main/account/account_list.html')
     idcard = request.session.get('idcard')
     real_name = request.session.get('real_name')
     login_name = request.session.get('login_name')
@@ -63,7 +56,6 @@ def account_list(request):
     if login_name:
         accounts = judge_login_name(login_name, accounts)
 
-
     page = request.GET.get('page', 1)
     per_page = request.GET.get('per_page', 3)
     pagin = Paginator(accounts, per_page)
@@ -76,6 +68,69 @@ def account_list(request):
     }
     request.session.flush()
     return render(request, 'NETCTOSS_Demo/main/account/account_list.html', context=context)
+
+
+def account_searchid(request):
+    idcard = request.GET.get('idcard')
+    real_name = request.GET.get('real_name')
+    login_name = request.GET.get('login_name')
+    status = request.GET.get('status')
+
+    request.session['idcard'] = idcard
+    request.session['real_name'] = real_name
+    request.session['login_name'] = login_name
+    request.session['status'] = status
+    data = {
+        'msg': 'ok',
+        'status': 200
+    }
+    return JsonResponse(data=data)
+
+
+def account_delete(request):
+    id = request.GET.get('id')
+    account = Account.objects.get(pk=id)
+    account.status = '0'
+    account.close_date = datetime.datetime.now()
+    account.save()
+    data = {
+        'msg': 'ok',
+        'status': 200,
+        'account': account.get()
+    }
+    return JsonResponse(data=data)
+
+
+def account_stop(request):
+    id1 = request.GET.get('id1')
+    flag = request.GET.get('flag')
+    if flag == '1':
+        account = Account.objects.get(pk=id1)
+        account.status = '1'
+        # account.pause_date = datetime.datetime.now()
+        account.pause_date = None
+
+        account.save()
+
+    else:
+
+        account = Account.objects.get(pk=id1)
+        account.status = '2'
+        # account.pause_date =None
+
+        Account.last_login_time = None
+
+        account.save()
+
+    data = {
+        'msg': 'ok',
+        'status': 200,
+        'account': account.get(),
+        'flag': flag,
+
+    }
+
+    return JsonResponse(data=data)
 
 
 def account_add(request):
@@ -186,7 +241,7 @@ def add_user(request):
 
 def account_modi(request):
     data = {}
-    real_name = request.session.get('real_name')
+    real_name = request.GET.get('real_name')
     if real_name:
         account = Account.objects.filter(real_name=real_name)[0]
         data['account'] = account
@@ -243,7 +298,7 @@ def save_modifications(request):
 
 def account_detail(request):
     data = {}
-    real_name = request.session.get('real_name')
+    real_name = request.GET.get('real_name')
     if real_name:
         account = Account.objects.filter(real_name=real_name)[0]
         if account.recommender_id:
@@ -256,76 +311,3 @@ def account_detail(request):
         data['r_id'] = r_id
         data['r_idcard_no'] = r_idcard_no
     return render(request, 'NETCTOSS_Demo/main/account/account_detail.html', context=data)
-
-def account_modi(request):
-    return render(request, 'NETCTOSS_Demo/main/account/account_modi.html')
-
-
-def account_searchid(request):
-    idcard = request.GET.get('idcard')
-    real_name = request.GET.get('real_name')
-    login_name = request.GET.get('login_name')
-    status = request.GET.get('status')
-    request.session['idcard'] = idcard
-    request.session['real_name'] = real_name
-    request.session['login_name'] = login_name
-    request.session['status'] = status
-    data = {
-        'msg': 'ok',
-        'status': 200
-    }
-
-    return JsonResponse(data=data)
-
-
-def account_delete(request):
-    id = request.GET.get('id')
-    account = Account.objects.get(pk=id)
-    account.status = '0'
-    account.close_date=datetime.datetime.now()
-    account.save()
-    data = {
-        'msg': 'ok',
-        'status': 200,
-        'account': account.get()
-    }
-    return JsonResponse(data=data)
-
-
-def account_stop(request):
-
-    id1 = request.GET.get('id1')
-    flag = request.GET.get('flag')
-    if flag == '1':
-        account = Account.objects.get(pk=id1)
-        account.status = '1'
-        account.last_login_time=None
-        account.pause_date =None
-
-
-        account.save()
-
-    else:
-
-        account = Account.objects.get(pk=id1)
-        account.status = '2'
-        # account.pause_date =None
-        account.last_login_time=datetime.datetime.now()
-        Account.last_login_time=None
-
-        account.save()
-
-    data = {
-        'msg': 'ok',
-        'status': 200,
-        'account': account.get(),
-        'flag': flag,
-
-    }
-
-    return JsonResponse(data=data)
-
-def find_name(request):
-    real_name = request.GET.get('real_name')
-    request.session['real_name'] = real_name
-    return JsonResponse({})

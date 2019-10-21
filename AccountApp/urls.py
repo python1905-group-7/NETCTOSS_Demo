@@ -27,5 +27,4 @@ urlpatterns = [
     url(r'^save_modifications/', views.save_modifications, name='save_modifications'),
 
     url(r'^account_detail/', views.account_detail, name='account_detail'),
-    url(r'^find_name/', views.find_name, name='find_name')
 ]

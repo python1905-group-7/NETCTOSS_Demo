@@ -6,12 +6,12 @@
     {{ block.super }}
     <!--主要区域开始-->
     <div id="main">
-        <form>
+        <form action="" method="post">
             <!--查询-->
             <div class="search_add">
-                <div>身份证：<input type="text" name="idcard" value="" class="text_search"/></div>
-                <div>姓名：<input type="text" class="width70 text_search2" value=""/></div>
-                <div>登录名：<input type="text" value="" class="text_search3"/></div>
+                <div>身份证：<input type="text" name="idcard" class="text_search"/></div>
+                <div>姓名：<input type="text" class="width70 text_search2"/></div>
+                <div>登录名：<input type="text" class="text_search3"/></div>
                 <div>
                     状态：
                     <select class="select_search">
@@ -24,7 +24,11 @@
                 <div><input type="button" value="搜索" class="btn_search"/></div>
                 <input type="button" value="增加" class="btn_add" onclick="location.href='/account/account_add/';"/>
             </div>
-
+            <!--删除等的操作提示-->
+            <div id="operate_result_info" class="operate_success">
+                <img src="{% static 'images/close.png' %}" onclick="this.parentNode.style.display='none';"/>
+                删除成功，且已删除其下属的业务账号！
+            </div>
             <!--数据区域：用表格展示数据-->
             <div id="data">
                 <table id="datalist">
@@ -64,7 +68,7 @@
                                 <td class="td_modi" hidden>
                                     <input type="button" value="暂停" class="btn_pause" id1="{{ account.id }}"/>
                                     <input type="button" value="修改" class="btn_modify"
-                                           onclick="location.href='/account/account_modi'"/>
+                                           onclick="location.href='/account/account_modi/'"/>
                                     <input type="button" value="删除" class="btn_delete" id="{{ account.id }}"/>
                                 </td>
                             {% else %}
@@ -72,10 +76,10 @@
                                     {% if account.status == '1' %}
                                         <input type="button" value="暂停" class="btn_pause" id1="{{ account.id }}"/>
                                     {% else %}
-                                        <input type="button" value="开通" class="btn_start" id1="{{ account.id }}"/>
+                                        <input type="button" value="开通" class="btn_pause" id1="{{ account.id }}"/>
                                     {% endif %}
                                     <input type="button" value="修改" class="btn_modify"
-                                           onclick="location.href='/account/account_modi'"/>
+                                           onclick="location.href='/account/account_modi/'"/>
                                     <input type="button" value="删除" class="btn_delete" id="{{ account.id }}"/>
                                 </td>
                             {% endif %}
@@ -128,7 +132,6 @@
 
 {% block ext_js %}
     {{ block.super }}
-    <script type="text/javascript" src="{% static 'NETCTOSS_Demo/main/account/js/account.js' %}"></script>
     <script type="text/javascript" src="{% static 'NETCTOSS_Demo/main/account/js/account_list.js' %}"></script>
     <script language="javascript" type="text/javascript">
         //删除

@@ -3,8 +3,6 @@
 {% load static %}
 
 {% block content %}
-    {{ block.super }}
-
     <!--主要区域开始-->
     <div id="main">
         <form class="main_form">
@@ -87,7 +85,6 @@
             <div class="text_info clearfix"><span>生日：</span></div>
             <div class="input_info">
                 <input type="text" readonly class="readonly" value="{{ account.birthdate }}"/>
-                <input type="text" readonly class="readonly" value="1980/01/21，由身份证计算而来"/>
             </div>
             <div class="text_info clearfix"><span>Email：</span></div>
             <div class="input_info">
@@ -108,8 +105,6 @@
 
             <div class="text_info clearfix"><span>性别：</span></div>
             <div class="input_info fee_type">
-                <input type="radio" name="radSex" checked="checked" id="female" disabled/>
-                <label for="female">女</label>
                 <input type="radio" name="radSex" id="male" disabled/>
                 <label for="male">男</label>
                 <input type="radio" name="radSex" id="female" disabled/>

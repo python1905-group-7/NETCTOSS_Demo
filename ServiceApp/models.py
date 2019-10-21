@@ -17,7 +17,7 @@ class Service(models.Model):
     # 密码
     login_passwd = models.CharField(max_length=512)
     # 状态
-    status = models.NullBooleanField()
+    status = models.NullBooleanField(default=True)
     # 开通时间
     create_date = models.DateTimeField(auto_now_add=True)
     # 暂停时间

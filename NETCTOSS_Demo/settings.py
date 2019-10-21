@@ -80,8 +80,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'netctoss',
-        'USER': 'cluom',
-        'PASSWORD': 'cluom',
+        'USER': 'zhang',
+        'PASSWORD': '7777',
         'HOST': 'localhost',
         'PORT': '3306'
     }

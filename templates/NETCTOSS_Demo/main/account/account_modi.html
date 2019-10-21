@@ -8,12 +8,11 @@
 {% endblock %}
 
 {% block content %}
-    {{ block.super }}
     <!--主要区域开始-->
     <div id="main">
         <!--保存成功或者失败的提示消息-->
         <div id="save_result_info" class="save_fail">保存失败，你输入的信息有误！</div>
-        <form class="main_form">
+        <form action="" method="post" class="main_form">
             <!--必填项-->
             <div class="text_info clearfix"><span>账务账号ID：</span></div>
             <div class="input_info">
