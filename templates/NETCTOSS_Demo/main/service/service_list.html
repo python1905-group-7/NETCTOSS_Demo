@@ -34,11 +34,11 @@
                         </select>
                     </div>
                     <div><input type="button" value="搜索" class="btn_search" /></div>
-                    <input type="button" value="增加" class="btn_add"  />
+                    <input type="button" value="增加" class="btn_add" onclick="location.href='{% url "service:service_add" %}'"  />
                 </div>
                 <!--删除的操作提示-->
                 <div id="operate_result_info" class="operate_success">
-                    <img src="../images/close.png" onclick="this.parentNode.style.display='none';" />
+                    <img src="{% static 'images/close.png' %}" onclick="this.parentNode.style.display='none';" />
                     删除成功！
                 </div>
                 <!--数据区域：用表格展示数据-->
@@ -69,36 +69,29 @@
                             {% elif service.status == 0 %}
                             <td >暂停</td>
                             {% elif service.status == Null %}
-                            <td >停止</td>
+                            <td >删除</td>
                         {% endif %}
 
                         <td>{{ service.unix_host }}</td>
                         <td>
-                            {% if service.cost.cost_type == '1' %}
-                                     <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 20 小时</a>
-                                    <!--浮动的详细信息-->
-                                    <div class="detail_info">
-                                        20小时，24.5 元，超出部分 0.03元/分钟
-                                    </div>
-                                {% elif service.cost.cost_type == '2' %}
-                                    <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 40 小时</a>
-                                    <!--浮动的详细信息-->
-                                    <div class="detail_info">
-                                        20小时，40.5 元，超出部分 0.03元/分钟
-                                    </div>
-                                {% elif service.cost.cost_type == '3' %}
-                                    <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 60 小时</a>
-                                    <!--浮动的详细信息-->
-                                    <div class="detail_info">
-                                        20小时，55 元，超出部分 0.03元/分钟
-                                    </div>
-                            {% endif %}
-
+                             <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">{{service.cost.name}}</a>
+                            <!--浮动的详细信息-->
+                            <div class="detail_info">
+                                {{ service.cost.descr }}
+                            </div>
                         </td>
                         <td class="td_modi" sid="{{ service.id }}">
-                            <input type="button" value="暂停" class="btn_pause" />
-                            <input type="button" value="修改" class="btn_modify"  />
-                            <input type="button" value="删除" class="btn_delete" />
+                            {% if service.status == 1 %}
+                                <input type="button" value="暂停" class="btn_pause" />
+                                <input type="button" value="修改" class="btn_modify" onclick="location.href='/service/modify/?sid={{ service.id }}'" />
+                                <input type="button" value="删除" class="btn_delete" />
+                            {% elif service.status == 0 %}
+                                <input type="button" value="开通" class="btn_start" />
+                                <input type="button" value="修改" class="btn_modify" onclick="location.href='/service/modify/?sid={{ service.id }}'"  />
+                                <input type="button" value="删除" class="btn_delete" />
+                                {% elif service.status == null %}
+                            {% endif %}
+
                         </td>
                     </tr>
                     {% endfor %}
@@ -115,24 +108,24 @@
 
                 <div id="pages">
 
-                    <a href="{% url 'service:test' %}?page=1">首页</a>
+                    <a href="{% url 'service:service_list' %}?page=1">首页</a>
                     {% if s_page.has_previous %}
-                        <a href="{% url 'service:test' %}?page={{ s_page.previous_page_number }}">上一页</a>
+                        <a href="{% url 'service:service_list' %}?page={{ s_page.previous_page_number }}">上一页</a>
                         {% else %}
                         <a href="#">上一页</a>
                     {% endif %}
 
                     {% for page in pagin.page_range %}
-                         <a href="{% url 'service:test' %}?page={{ page }}" class="current_page">{{ page }}</a>
+                         <a href="{% url 'service:service_list' %}?page={{ page }}" class="current_page">{{ page }}</a>
                     {% endfor %}
 
                     {% if s_page.has_next %}
-                        <a href="{% url 'service:test' %}?page={{ s_page.next_page_number }}">下一页</a>
+                        <a href="{% url 'service:service_list' %}?page={{ s_page.next_page_number }}">下一页</a>
                         {% else %}
                         <a href="#">下一页</a>
                     {% endif %}
 
-                    <a href="{% url 'service:test' %}?page={{ pagin.num_pages }}">末页</a>
+                    <a href="{% url 'service:service_list' %}?page={{ pagin.num_pages }}">末页</a>
                 </div>
             </form>
         </div>
@@ -141,5 +134,28 @@
 
 {% block ext_js %}
 {{ block.super }}
+    <script src="{% static 'NETCTOSS_Demo/main/service/js/service_list.js' %}"></script>
     <script src="{% static 'NETCTOSS_Demo/main/service/js/service.js' %}"></script>
+    <script language="javascript" type="text/javascript">
+            //显示角色详细信息
+            function showDetail(flag, a) {
+                var detailDiv = a.parentNode.getElementsByTagName("div")[0];
+                if (flag) {
+                    detailDiv.style.display = "block";
+                }
+                else
+                    detailDiv.style.display = "none";
+            }
+            //删除
+            function deleteAccount() {
+                var r = window.confirm("确定要删除此业务账号吗？删除后将不能恢复。");
+                document.getElementById("operate_result_info").style.display = "block";
+            }
+            //开通或暂停
+            function setState() {
+                var r = window.confirm("确定要开通此业务账号吗？");
+                document.getElementById("operate_result_info").style.display = "block";
+            }
+        </script>
+
 {% endblock %}

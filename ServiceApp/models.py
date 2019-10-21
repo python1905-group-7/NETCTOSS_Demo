@@ -27,3 +27,4 @@ class Service(models.Model):
 
     class Meta:
         db_table = 'SERVICE'
+
