@@ -10,6 +10,22 @@ from AccountApp.models import Account
 from FeeApp.models import Cost
 from ServiceApp.models import Service
 
+def judge_status1(status, service_list):
+    service = service_list.filter(status=status)
+    return service
+
+
+def judge_identity1(idcard, service_list):
+    account = Account.objects.filter(idcard_no=idcard)
+    service = service_list.filter(account=account)
+
+    return service
+
+
+def judge_unix_host1(unix_host, service_list):
+    service = service_list.filter(unix_host=unix_host)
+    return service
+
 
 def service_list(request):
     service_list = Service.objects.all()

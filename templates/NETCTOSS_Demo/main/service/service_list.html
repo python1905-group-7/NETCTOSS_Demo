@@ -44,6 +44,32 @@
                 <!--数据区域：用表格展示数据-->
                 <div id="data">
                     <table id="datalist">
+    <div id="main">
+        <form action="" method="">
+            <!--查询-->
+            <div class="search_add">
+                <div>OS 账号：<input type="text" value="" class="width100 text_search1"/></div>
+                <div>服务器 IP：<input type="text" value="" class="width100 text_search2"/></div>
+                <div>身份证：<input type="text" value="" class="text_search3"/></div>
+                <div>状态：
+                    <select class="select_search">
+                        <option>全部</option>
+                        <option>开通</option>
+                        <option>暂停</option>
+                        <option>删除</option>
+                    </select>
+                </div>
+                <div><input type="button" value="搜索" class="btn_search"/></div>
+                <input type="button" value="增加" class="btn_add" onclick="location.href='/service/service_add';">
+            </div>
+            <!--删除的操作提示-->
+            <div id="operate_result_info" class="operate_success">
+                <img src="{% static 'images/close.png' %}" onclick="this.parentNode.style.display='none';"/>
+                删除成功！
+            </div>
+            <!--数据区域：用表格展示数据-->
+            <div id="data">
+                <table id="datalist">
                     <tr>
                         <th class="width50">业务ID</th>
                         <th class="width70">账务账号ID</th>
@@ -58,6 +84,53 @@
 
                     {% for service in s_page.object_list %}
 
+                        <tr>
+                            <td id="to_service_list"><a href="{% url 'service:service_detail' %}?sid={{ service.id }}">{{ service.id }}</a></td>
+                            <td>{{ service.account.id }}</td>
+                            <td>{{ service.account.idcard_no }}</td>
+                            <td>{{ service.account.real_name }}</td>
+                            <td>{{service.os_username}}</td>
+                            <td>
+                                {% if service.status == 1%}
+                                    开通
+                                {% elif service.status == 0 %}
+                                    暂停
+                                {% elif service.status == None %}
+                                    删除
+                                {% endif %}
+                            </td>
+                            <td>{{ service.unix_host }}</td>
+                            <td>
+                                {% if service.cost.cost_type == '1' %}
+                                    <a class="summary" onmouseover="showDetail(true,this);"
+                                       onmouseout="showDetail(false,this);">{{ service.cost.base_duration }}</a>
+                                    <!--浮动的详细信息-->
+                                    <div class="detail_info">
+                                        {{ service.cost.dercr }}
+                                    </div>
+                                {% elif service.cost.cost_type == '2' %}
+                                    <a class="summary" onmouseover="showDetail(true,this);"
+                                       onmouseout="showDetail(false,this);">{{ service.cost.base_duration }}</a>
+                                    <!--浮动的详细信息-->
+                                    <div class="detail_info">
+                                        {{ service.cost.dercr }}
+                                    </div>
+                                {% elif service.cost.cost_type == '3' %}
+                                    <a class="summary" onmouseover="showDetail(true,this);"
+                                       onmouseout="showDetail(false,this);">{{ service.cost.base_duration }}</a>
+                                    <!--浮动的详细信息-->
+                                    <div class="detail_info">
+                                        {{ service.cost.dercr }}
+                                    </div>
+                                {% endif %}
+
+                            </td>
+                            <td class="td_modi" sid="{{ service.id }}">
+                                <input type="button" value="暂停" class="btn_pause"/>
+                                <input type="button" value="修改" class="btn_modify"/>
+                                <input type="button" value="删除" class="btn_delete"/>
+                            </td>
+                        </tr>
                     <tr>
                         <td><a href="service_detail.html" title="查看明细">{{ service.id }}</a></td>
                         <td>{{service.account.id}}</td>

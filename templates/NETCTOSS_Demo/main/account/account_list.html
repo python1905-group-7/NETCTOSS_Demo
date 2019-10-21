@@ -1,27 +1,30 @@
 ﻿{% extends 'base_main.html' %}
-
 {% load static %}
-
+{% block ext_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'NETCTOSS_Demo/main/account/js/account.js' %}"></script>
+{% endblock %}
 {% block content %}
+    {{ block.super }}
     <!--主要区域开始-->
     <div id="main">
-        <form action="" method="post">
+        <form action="" method="">
             <!--查询-->
             <div class="search_add">
-                <div>身份证：<input type="text" value="不验证" class="text_search"/></div>
-                <div>姓名：<input type="text" class="width70 text_search" value="不验证"/></div>
-                <div>登录名：<input type="text" value="不验证" class="text_search"/></div>
+                <div>身份证：<input type="text" name="idcard"  value="" class="text_search"/></div>
+                <div>姓名：<input type="text" class="width70 text_search2" value=""/></div>
+                <div>登录名：<input type="text" value="" class="text_search3"/></div>
                 <div>
                     状态：
                     <select class="select_search">
                         <option>全部</option>
-                        <option>开通</option>
-                        <option>暂停</option>
-                        <option>删除</option>
+                        <option >开通</option>
+                        <option >暂停</option>
+                        <option >删除</option>
                     </select>
                 </div>
                 <div><input type="button" value="搜索" class="btn_search"/></div>
-                <input type="button" value="增加" class="btn_add" onclick="location.href='/account/account_add/';"/>
+                <input type="button" value="增加" class="btn_add" onclick="location.href='/account/account_add';"/>
             </div>
             <!--删除等的操作提示-->
             <div id="operate_result_info" class="operate_success">
@@ -41,73 +44,45 @@
                         <th class="width150">上次登录时间</th>
                         <th class="width200"></th>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td class="real_name">zhangsanfeng</td>
-                        <td>230102197902137862</td>
-                        <td>jiaqiang</td>
-                        <td>开通</td>
-                        <td>2013-01-23</td>
-                        <td>2013-02-23 00:00:00</td>
-                        <td class="td_modi">
-                            <input type="button" value="暂停" class="btn_pause" onclick="setState();"/>
-                            <input type="button" value="修改" class="btn_modify"/>
-                            <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td class="real_name">贾强</td>
-                        <td>230102197902137862</td>
-                        <td>jiaqiang</td>
-                        <td>暂停</td>
-                        <td>2013-01-23</td>
-                        <td>2013-02-23 00:00:00</td>
-                        <td class="td_modi">
-                            <input type="button" value="开通" class="btn_start" onclick="setState();"/>
-                            <input type="button" value="修改" class="btn_modify"/>
-                            <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td class="real_name">贾强</td>
-                        <td>230102197902137862</td>
-                        <td>jiaqiang</td>
-                        <td>删除</td>
-                        <td>2013-01-23</td>
-                        <td>2013-02-23 00:00:00</td>
-                        <td class="td_modi">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td class="real_name">贾强</td>
-                        <td>230102197902137862</td>
-                        <td>jiaqiang</td>
-                        <td>开通</td>
-                        <td>2013-01-23</td>
-                        <td>2013-02-23 00:00:00</td>
-                        <td class="td_modi">
-                            <input type="button" value="暂停" class="btn_pause" onclick="setState();"/>
-                            <input type="button" value="修改" class="btn_modify"/>
-                            <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td class="real_name">贾强</td>
-                        <td>230102197902137862</td>
-                        <td>jiaqiang</td>
-                        <td>暂停</td>
-                        <td>2013-01-23</td>
-                        <td>2013-02-23 00:00:00</td>
-                        <td class="td_modi">
-                            <input type="button" value="开通" class="btn_start" onclick="setState();"/>
-                            <input type="button" value="修改" class="btn_modify"/>
-                            <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
-                        </td>
-                    </tr>
+                    {% for account in p.object_list %}
+                        <tr>
+                            <td>{{ account.id }}</td>
+                            <td class="real_name">{{ account.real_name }}</td>
+                            <td>{{ account.idcard_no }}</td>
+                            <td>{{ account.login_name }}</td>
+
+                            {% if account.status == '1' %}
+                                <td>开通</td>
+                            {% elif account.status == '2' %}
+                                <td>暂停</td>
+                                {% elif account.status == '0' %}
+                                <td>删除</td>
+                            {% endif %}
+
+                            <td>{{ account.create_date }}</td>
+
+                            {% if account.last_login_time == None %}
+                                <td></td>
+                            {% else %}
+                                <td>{{ account.last_login_time }}</td>
+                            {% endif %}
+                        {% if account.status == '0' %}
+                            <td class="td_modi" hidden>
+                                <input type="button" value="暂停" class="btn_pause" id1="{{ account.id }}"/>
+                                <input type="button" value="修改" class="btn_modify"
+                                       onclick="location.href='/account/account_modi'"/>
+                                <input type="button" value="删除" class="btn_delete" id="{{ account.id }}"/>
+                            </td>
+                        {% else %}
+                        <td class="td_modi" >
+                                <input type="button" value="暂停" class="btn_pause" id1="{{ account.id }}"/>
+                                <input type="button" value="修改" class="btn_modify"
+                                       onclick="location.href='/account/account_modi'"/>
+                                <input type="button" value="删除" class="btn_delete" id="{{ account.id }}"/>
+                            </td>
+                        {% endif %}
+                        </tr>
+                    {% endfor %}
                 </table>
                 <p>业务说明：<br/>
                     1、创建则开通，记载创建时间；<br/>
@@ -120,41 +95,34 @@
             </div>
             <!--分页-->
             <div id="pages">
-                <a href="#">首页</a>
-                <a href="#">上一页</a>
-                <a href="#" class="current_page">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">5</a>
-                <a href="#">下一页</a>
-                <a href="#">末页</a>
+                {% if p.has_previous %}
+                    <a href="{% url 'account:account_list' %}?page={{ p.previous_page_number }}">上一页</a>
+                {% else %}
+                    <a href="#">上一页</a>
+                {% endif %}
+
+                {% for foo in pagin.page_range %}
+
+                    {% if foo == page %}
+                        <a style="color: green" href="{% url 'account:account_list' %}?page={{ foo }}">{{ foo }}</a>
+                    {% else %}
+                        <a href="{% url 'account:account_list' %}?page={{ foo }}">{{ foo }}</a>
+
+                    {% endif %}
+                {% endfor %}
+
+                {% if p.has_next %}
+                    <a href="{% url 'account:account_list' %}?page={{ p.next_page_number }}">下一页</a>
+                {% else %}
+                    <a href="#">下一页</a>
+                {% endif %}
             </div>
         </form>
     </div>
     <!--主要区域结束-->
-{% endblock %}
-
-{% block footer %}
     <div id="footer">
 
+
     </div>
-{% endblock %}
 
-{% block ext_js %}
-    {{ block.super }}
-    <script type="text/javascript" src="{% static 'NETCTOSS_Demo/main/account/js/account_list.js' %}"></script>
-    <script language="javascript" type="text/javascript">
-        //删除
-        function deleteAccount() {
-            var r = window.confirm("确定要删除此账务账号吗？\r\n删除后将不能恢复，且会删除其下属的所有业务账号。");
-            document.getElementById("operate_result_info").style.display = "block";
-        }
-
-        //开通或暂停
-        function setState() {
-            var r = window.confirm("确定要开通此账务账号吗？");
-            document.getElementById("operate_result_info").style.display = "block";
-        }
-    </script>
 {% endblock %}
