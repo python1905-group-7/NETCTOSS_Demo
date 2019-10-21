@@ -87,12 +87,19 @@ def add_cost(request):
 
 
 def update_to_cost_status(request):
-    cost_id = int(request.GET.get('cost_id'))
-    cost = Cost.objects.filter(id=cost_id)
     data = {
         'msg': '修改成功!',
         'status': 200
     }
+
+    try:
+        cost_id = int(request.GET.get('cost_id'))
+    except ValueError:
+        data['msg'] = '数据类型错误!'
+        data['status'] = 500
+
+        return JsonResponse(data=data)
+    cost = Cost.objects.filter(id=cost_id)
 
     if cost.exists():
         cost = cost.first()
