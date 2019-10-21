@@ -21,5 +21,5 @@ urlpatterns = [
     url(r'^test/', include('TestApp.urls')),
     url(r'^login/', include('LoginApp.urls', namespace='login')),
     url(r'^account/', include('AccountApp.urls', namespace='account')),
-    url(r'service/',include('ServiceApp.urls',namespace='service'))
+    url(r'service/', include('ServiceApp.urls', namespace='service'))
 ]
