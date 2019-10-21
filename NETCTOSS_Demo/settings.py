@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'TestApp.apps.TestappConfig',
-    'AccountApp'
+    'AccountApp',
+    'ServiceApp',
+    'FeeApp',
+    'LoginApp',
 ]
 
 MIDDLEWARE = [

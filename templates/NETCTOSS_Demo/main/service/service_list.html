@@ -3,47 +3,47 @@
 {% load static %}
 
 {% block title %}
-{{ block.super }}
+    {{ block.super }}
     业务账号
 {% endblock %}
 
 {% block css %}
-{{ block.super }}
+    {{ block.super }}
 {% endblock %}
 
 {% block header %}
-{{ block.super }}
+    {{ block.super }}
 {% endblock %}
 
 {% block content %}
-{{ block.super }}
+    {{ block.super }}
 
-            <div id="main">
-            <form action="" method="">
-                <!--查询-->
-                <div class="search_add">
-                    <div>OS 账号：<input type="text" value="" class="width100 text_search" /></div>
-                    <div>服务器 IP：<input type="text" value="" class="width100 text_search" /></div>
-                    <div>身份证：<input type="text"  value="" class="text_search" /></div>
-                    <div>状态：
-                        <select class="select_search">
-                            <option>全部</option>
-                            <option>开通</option>
-                            <option>暂停</option>
-                            <option>删除</option>
-                        </select>
-                    </div>
-                    <div><input type="button" value="搜索" class="btn_search" /></div>
-                    <input type="button" value="增加" class="btn_add"  />
+    <div id="main">
+        <form action="" method="">
+            <!--查询-->
+            <div class="search_add">
+                <div>OS 账号：<input type="text" value="" class="width100 text_search1"/></div>
+                <div>服务器 IP：<input type="text" value="" class="width100 text_search2"/></div>
+                <div>身份证：<input type="text" value="" class="text_search3"/></div>
+                <div>状态：
+                    <select class="select_search">
+                        <option>全部</option>
+                        <option>开通</option>
+                        <option>暂停</option>
+                        <option>删除</option>
+                    </select>
                 </div>
-                <!--删除的操作提示-->
-                <div id="operate_result_info" class="operate_success">
-                    <img src="../images/close.png" onclick="this.parentNode.style.display='none';" />
-                    删除成功！
-                </div>
-                <!--数据区域：用表格展示数据-->
-                <div id="data">
-                    <table id="datalist">
+                <div><input type="button" value="搜索" class="btn_search"/></div>
+                <input type="button" value="增加" class="btn_add" onclick="location.href='/service/service_add';">
+            </div>
+            <!--删除的操作提示-->
+            <div id="operate_result_info" class="operate_success">
+                <img src="{% static 'images/close.png' %}" onclick="this.parentNode.style.display='none';"/>
+                删除成功！
+            </div>
+            <!--数据区域：用表格展示数据-->
+            <div id="data">
+                <table id="datalist">
                     <tr>
                         <th class="width50">业务ID</th>
                         <th class="width70">账务账号ID</th>
@@ -58,88 +58,92 @@
 
                     {% for service in s_page.object_list %}
 
-                    <tr>
-                        <td><a href="service_detail.html" title="查看明细">{{ service.id }}</a></td>
-                        <td>{{service.account.id}}</td>
-                        <td>{{service.account.idcard_no}}</td>
-                        <td>{{service.account.real_name}}</td>
-                        <td>openlab1</td>
-                        {% if service.status == 1 %}
-                             <td >开通</td>
-                            {% elif service.status == 0 %}
-                            <td >暂停</td>
-                            {% elif service.status == Null %}
-                            <td >停止</td>
-                        {% endif %}
-
-                        <td>{{ service.unix_host }}</td>
-                        <td>
-                            {% if service.cost.cost_type == '1' %}
-                                     <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 20 小时</a>
+                        <tr>
+                            <td id="to_service_list"><a href="{% url 'service:service_detail' %}?sid={{ service.id }}">{{ service.id }}</a></td>
+                            <td>{{ service.account.id }}</td>
+                            <td>{{ service.account.idcard_no }}</td>
+                            <td>{{ service.account.real_name }}</td>
+                            <td>{{service.os_username}}</td>
+                            <td>
+                                {% if service.status == 1%}
+                                    开通
+                                {% elif service.status == 0 %}
+                                    暂停
+                                {% elif service.status == None %}
+                                    删除
+                                {% endif %}
+                            </td>
+                            <td>{{ service.unix_host }}</td>
+                            <td>
+                                {% if service.cost.cost_type == '1' %}
+                                    <a class="summary" onmouseover="showDetail(true,this);"
+                                       onmouseout="showDetail(false,this);">包{{ service.cost.base_duration }}小时</a>
                                     <!--浮动的详细信息-->
                                     <div class="detail_info">
-                                        20小时，24.5 元，超出部分 0.03元/分钟
+                                        {{ service.cost.dercr }}
                                     </div>
                                 {% elif service.cost.cost_type == '2' %}
-                                    <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 40 小时</a>
+                                    <a class="summary" onmouseover="showDetail(true,this);"
+                                       onmouseout="showDetail(false,this);">包{{ service.cost.base_duration }}</a>
                                     <!--浮动的详细信息-->
                                     <div class="detail_info">
-                                        20小时，40.5 元，超出部分 0.03元/分钟
+                                        {{ service.cost.dercr }}
                                     </div>
                                 {% elif service.cost.cost_type == '3' %}
-                                    <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 60 小时</a>
+                                    <a class="summary" onmouseover="showDetail(true,this);"
+                                       onmouseout="showDetail(false,this);">包{{ service.cost.base_duration }}</a>
                                     <!--浮动的详细信息-->
                                     <div class="detail_info">
-                                        20小时，55 元，超出部分 0.03元/分钟
+                                        {{ service.cost.dercr }}
                                     </div>
-                            {% endif %}
+                                {% endif %}
 
-                        </td>
-                        <td class="td_modi" sid="{{ service.id }}">
-                            <input type="button" value="暂停" class="btn_pause" />
-                            <input type="button" value="修改" class="btn_modify"  />
-                            <input type="button" value="删除" class="btn_delete" />
-                        </td>
-                    </tr>
+                            </td>
+                            <td class="td_modi" sid="{{ service.id }}">
+                                <input type="button" value="暂停" class="btn_pause"/>
+                                <input type="button" value="修改" class="btn_modify"/>
+                                <input type="button" value="删除" class="btn_delete"/>
+                            </td>
+                        </tr>
                     {% endfor %}
                 </table>
-                <p>业务说明：<br />
-                1、创建即开通，记载创建时间；<br />
-                2、暂停后，记载暂停时间；<br />
-                3、重新开通后，删除暂停时间；<br />
-                4、删除后，记载删除时间，标示为删除，不能再开通、修改、删除；<br />
-                5、业务账号不设计修改密码功能，由用户自服务功能实现；<br />
-                6、暂停和删除状态的账务账号下属的业务账号不能被开通。</p>
-                </div>
-                <!--分页-->
+                <p>业务说明：<br/>
+                    1、创建即开通，记载创建时间；<br/>
+                    2、暂停后，记载暂停时间；<br/>
+                    3、重新开通后，删除暂停时间；<br/>
+                    4、删除后，记载删除时间，标示为删除，不能再开通、修改、删除；<br/>
+                    5、业务账号不设计修改密码功能，由用户自服务功能实现；<br/>
+                    6、暂停和删除状态的账务账号下属的业务账号不能被开通。</p>
+            </div>
+            <!--分页-->
 
-                <div id="pages">
+            <div id="pages">
 
-                    <a href="{% url 'service:test' %}?page=1">首页</a>
-                    {% if s_page.has_previous %}
-                        <a href="{% url 'service:test' %}?page={{ s_page.previous_page_number }}">上一页</a>
-                        {% else %}
-                        <a href="#">上一页</a>
-                    {% endif %}
+                <a href="{% url 'service:service_list' %}?page=1">首页</a>
+                {% if s_page.has_previous %}
+                    <a href="{% url 'service:service_list' %}?page={{ s_page.previous_page_number }}">上一页</a>
+                {% else %}
+                    <a href="#">上一页</a>
+                {% endif %}
 
-                    {% for page in pagin.page_range %}
-                         <a href="{% url 'service:test' %}?page={{ page }}" class="current_page">{{ page }}</a>
-                    {% endfor %}
+                {% for page in pagin.page_range %}
+                    <a href="{% url 'service:service_list' %}?page={{ page }}" class="current_page">{{ page }}</a>
+                {% endfor %}
 
-                    {% if s_page.has_next %}
-                        <a href="{% url 'service:test' %}?page={{ s_page.next_page_number }}">下一页</a>
-                        {% else %}
-                        <a href="#">下一页</a>
-                    {% endif %}
+                {% if s_page.has_next %}
+                    <a href="{% url 'service:service_list' %}?page={{ s_page.next_page_number }}">下一页</a>
+                {% else %}
+                    <a href="#">下一页</a>
+                {% endif %}
 
-                    <a href="{% url 'service:test' %}?page={{ pagin.num_pages }}">末页</a>
-                </div>
-            </form>
-        </div>
-    
+                <a href="{% url 'service:service_list' %}?page={{ pagin.num_pages }}">末页</a>
+            </div>
+        </form>
+    </div>
+
 {% endblock %}
 
 {% block ext_js %}
-{{ block.super }}
+    {{ block.super }}
     <script src="{% static 'NETCTOSS_Demo/main/service/js/service.js' %}"></script>
 {% endblock %}

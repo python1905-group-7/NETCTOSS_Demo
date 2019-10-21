@@ -3,17 +3,29 @@ from django.db import models
 
 # Create your models here.
 class Account(models.Model):
+    #推荐人
     recommender_id = models.IntegerField(null=True)
+    #登陆名
     login_name = models.CharField(max_length=32)
+    # 登陆密码
     login_passwd = models.CharField(max_length=256)
+    # 状态
     status = models.CharField(max_length=4, default=1)
+    # 创建时间
     create_date = models.DateTimeField(auto_now=True)
+    #暂停时间
     pause_date = models.DateTimeField(null=True)
+    # 关闭时间
     close_date = models.DateTimeField(null=True)
+    # 真实名字？
     real_name = models.CharField(max_length=32)
+    # 身份证
     idcard_no = models.CharField(max_length=64)
+    # 出生日期
     birthdate = models.DateTimeField(null=True)
+    # 性别
     gender = models.CharField(max_length=8, null=True)
+    #职业
     occupation = models.CharField(max_length=32, null=True)
     telephone = models.CharField(max_length=32)
     email = models.CharField(max_length=64, null=True)
@@ -30,17 +42,3 @@ class Account(models.Model):
         return [self.id, self.real_name, self.idcard_no, self.login_name, self.status, self.create_date,
                 self.last_login_time]
 
-
-class Cost(models.Model):
-    name = models.CharField(max_length=64)
-    base_duration = models.IntegerField()
-    base_cost = models.FloatField()
-    unit_cost = models.FloatField()
-    status = models.NullBooleanField()
-    descr = models.CharField(max_length=256)
-    creatime = models.DateTimeField(auto_now=True)
-    startime = models.DateTimeField(null=True)
-    cost_type = models.CharField(max_length=16)
-
-    class Meta:
-        db_table = 'cost'
