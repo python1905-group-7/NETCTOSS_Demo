@@ -42,3 +42,10 @@ class Account(models.Model):
         return [self.id, self.real_name, self.idcard_no, self.login_name, self.status, self.create_date,
                 self.last_login_time]
 
+
+class Recommender(models.Model):
+    # 推荐人身份证
+    idcard_no = models.CharField(max_length=32)
+
+    class Meta:
+        db_table = 'recommender'
