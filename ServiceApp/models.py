@@ -8,6 +8,8 @@ from FeeApp.models import Cost
 class Service(models.Model):
     # account
     account = models.ForeignKey(Account)
+    # cost
+    cost = models.ForeignKey(Cost)
     # ip地址
     unix_host = models.CharField(max_length=32)
     # os账号
@@ -22,8 +24,7 @@ class Service(models.Model):
     pause_date = models.DateTimeField(null=True)
     # 停止时间
     close_date = models.DateTimeField(null=True)
-    # cost
-    cost = models.ForeignKey(Cost)
+
 
     class Meta:
         db_table = 'SERVICE'
