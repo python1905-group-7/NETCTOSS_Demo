@@ -7,7 +7,7 @@ class Account(models.Model):
     login_name = models.CharField(max_length=32)
     login_passwd = models.CharField(max_length=256)
     status = models.CharField(max_length=4, default=1)
-    create_date = models.DateTimeField(auto_now=True)
+    create_date = models.DateTimeField(auto_now_add=True)
     pause_date = models.DateTimeField(null=True)
     close_date = models.DateTimeField(null=True)
     real_name = models.CharField(max_length=32)
@@ -31,16 +31,4 @@ class Account(models.Model):
                 self.last_login_time]
 
 
-class Cost(models.Model):
-    name = models.CharField(max_length=64)
-    base_duration = models.IntegerField()
-    base_cost = models.FloatField()
-    unit_cost = models.FloatField()
-    status = models.NullBooleanField()
-    descr = models.CharField(max_length=256)
-    creatime = models.DateTimeField(auto_now=True)
-    startime = models.DateTimeField(null=True)
-    cost_type = models.CharField(max_length=16)
 
-    class Meta:
-        db_table = 'cost'

@@ -1,8 +1,12 @@
+import datetime
+
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
+
+
 from AccountApp.models import Account
 
 
@@ -29,13 +33,12 @@ def judge_login_name(login_name, accounts):
 
 def account_list(request):
     idcard = request.session.get('idcard')
-
     real_name = request.session.get('real_name')
     login_name = request.session.get('login_name')
     status = request.session.get('status')
-    print(status)
+
     if status == '删除':
-        status = 0
+        status = '0'
     elif status == '开通':
         status = '1'
     elif status == '暂停':
@@ -52,6 +55,7 @@ def account_list(request):
         accounts = judge_name(real_name, accounts)
     if login_name:
         accounts = judge_login_name(login_name, accounts)
+
 
     page = request.GET.get('page', 1)
     per_page = request.GET.get('per_page', 3)
@@ -100,6 +104,7 @@ def account_delete(request):
     id = request.GET.get('id')
     account = Account.objects.get(pk=id)
     account.status = '0'
+    account.close_date=datetime.datetime.now()
     account.save()
     data = {
         'msg': 'ok',
@@ -110,18 +115,34 @@ def account_delete(request):
 
 
 def account_stop(request):
+
     id1 = request.GET.get('id1')
     flag = request.GET.get('flag')
-    if flag:
-        pass
+    if flag == '1':
+        account = Account.objects.get(pk=id1)
+        account.status = '1'
+        account.last_login_time=None
+        account.pause_date =None
+
+
+        account.save()
+
     else:
-        pass
-    account = Account.objects.get(pk=id1)
-    account.status = '2'
-    account.save()
+
+        account = Account.objects.get(pk=id1)
+        account.status = '2'
+        # account.pause_date =None
+        account.last_login_time=datetime.datetime.now()
+        Account.last_login_time=None
+
+        account.save()
+
     data = {
         'msg': 'ok',
         'status': 200,
-        'account': account.get()
+        'account': account.get(),
+        'flag': flag,
+
     }
+
     return JsonResponse(data=data)

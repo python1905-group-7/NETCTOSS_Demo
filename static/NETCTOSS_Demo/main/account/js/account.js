@@ -1,5 +1,4 @@
-var flag = true;
-
+var flag = 1;
 $(function () {
     $(".btn_search").click(function () {
         var idcard = $(".text_search").val()
@@ -29,6 +28,7 @@ $(function () {
         var id = $(this).attr('id');
         var $object = $(this).parent().prev().prev().prev();
         var $object1 = $(this).parent()
+        alert('确定要删除此账务账号吗？删除后将不能恢复，且会删除其下属的所有业务账号')
         $.getJSON('/account/account_delete/',
             {'id': id},
             function (data) {
@@ -38,39 +38,67 @@ $(function () {
                 }
             }
         )
-    })
+    });
 
     $('.btn_pause').click(function () {
-        // var $btn_pause = $(this)
-        // var id1 = $(this).attr('id1');
-        // var $object = $(this).parent().prev().prev().prev();
-        // var $object1 = $(this).parent();
-        // $.getJSON('/account/account_stop/',
-        //     {'id1': id1},
-        //     function (data) {
-        //
-        //         if (data['status'] === 200) {
-        //             $object.html('暂停')
-        //             $btn_pause.val('开通')
-        //         }
-        //     }
-        // )
+
+        var $btn_pause = $(this)
         var id1 = $(this).attr('id1');
         var $object = $(this).parent().prev().prev().prev();
         var $object1 = $(this).parent();
-        flag = !flag;
-        if (flag) {
-            $(this).val('开通')
-        } else {
-            $(this).val('暂停')
-        }
-        $.getJSON(
-            '/account/account_stop/',
+
+        $.getJSON('/account/account_stop/',
             {'id1': id1, 'flag': flag},
-            function () {
+            function (data) {
+                if (data['status'] === 200) {
+                    if (data['flag'] === '1') {
+                        $object.html('开通');
+                        $btn_pause.val('暂停');
+                        flag = 2
+                    } else {
+                        alert('确定要暂停此账务账号嘛？')
+                        $object.html('暂停');
+                        $btn_pause.val('开通');
+                        flag = 1
+                        window.location.href='/account/account_list'
+
+                    }
+          }
+
 
             }
         )
+
+    })
+
+
+     $('.btn_start').click(function () {
+
+        var $btn_pause = $(this)
+        var id1 = $(this).attr('id1');
+        var $object = $(this).parent().prev().prev().prev();
+        var $object1 = $(this).parent();
+
+        $.getJSON('/account/account_stop/',
+            {'id1': id1, 'flag': flag},
+            function (data) {
+                if (data['status'] === 200) {
+                    if (data['flag'] === '1') {
+                        alert('确定要开通此账务账号吗？')
+                        $object.html('开通');
+                        $btn_pause.val('暂停');
+                        flag = 2
+                    } else {
+                        $object.html('暂停');
+                        $btn_pause.val('开通');
+                        flag = 1
+                        alert('确定要暂停此账务账号嘛？')
+                    }
+              }
+
+            }
+        )
+
     })
 
 
