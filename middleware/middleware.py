@@ -29,7 +29,7 @@ class LoginMiddleware(MiddlewareMixin):
         if request.path in LOGIN_REQUEST_JSON:
             if not user_id:
                 data = {
-                    'msg': '未登录',
+                    'msg': '未登录!',
                     'status': 201
                 }
                 return JsonResponse(data=data, json_dumps_params={'ensure_ascii': False})
