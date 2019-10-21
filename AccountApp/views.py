@@ -12,6 +12,7 @@ def account_list(request):
     return render(request, 'NETCTOSS_Demo/main/account/account_list.html')
 
 
+
 def account_add(request):
     return render(request, 'NETCTOSS_Demo/main/account/account_add.html')
 
