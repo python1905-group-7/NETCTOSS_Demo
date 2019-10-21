@@ -5,14 +5,16 @@ from PIL import Image, ImageFont
 from PIL.ImageDraw import ImageDraw
 from django.conf import settings
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.urls import reverse
 from django.utils.six import BytesIO
+from django.views import View
 
 from LoginApp.models import AdminInfo
+from LoginApp.serializers import UserSerializers
 
 
 def login(request):
@@ -35,7 +37,7 @@ def login(request):
                 if password == user.password:
                     request.session['user_id'] = user.id
 
-                    return redirect(reverse('login:index'))
+                    return redirect(reverse('login:index'), context={'user': user})
                 else:
                     context['password_error_info'] = '密码错误!'
             else:
@@ -44,6 +46,11 @@ def login(request):
             context['valicode_error_info'] = '验证码错误!'
 
         return render(request, 'NETCTOSS_Demo/user/login.html', context=context)
+
+
+def logout(request):
+    request.session.flush()
+    return redirect(reverse('login:login'))
 
 
 def index(request):
@@ -104,3 +111,17 @@ def generate_code():
         code += random.choice(source)
 
     return code
+
+
+class UserView(View):
+    def get(self, request):
+        user = AdminInfo.objects.get(pk=request.session.get('user_id'))
+        userSerializers = UserSerializers(user)
+
+        data = {
+            'msg': '获取成功!',
+            'status': 200,
+            'data': userSerializers.data
+        }
+
+        return JsonResponse(data=data, json_dumps_params={'ensure_ascii': False})

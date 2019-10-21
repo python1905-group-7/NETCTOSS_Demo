@@ -20,6 +20,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^test/', include('TestApp.urls')),
     url(r'^account/',include('AccountApp.urls',namespace='account')),
-
-    url(r'^login/',include('LoginApp.urls',namespace='login'))
+    url(r'^login/', include('LoginApp.urls', namespace='login')),
+    url(r'^fee/', include('FeeApp.urls', namespace='fee')),
 ]
