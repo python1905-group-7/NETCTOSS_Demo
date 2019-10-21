@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'LoginApp.apps.LoginappConfig',
     'AccountApp',
     'FeeApp',
-    'FeeApp.apps.FeeappConfig'
 ]
 
 MIDDLEWARE = [
