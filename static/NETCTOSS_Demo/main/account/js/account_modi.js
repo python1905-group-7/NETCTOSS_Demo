@@ -72,75 +72,45 @@ $('#check_new_pwd').blur(function () {
                 }
             }
         );
-        if ($('#confirm_pwd').val()) {
-            var c_pwd = $('#confirm_pwd').val();
-            $.getJSON(
-                '/account/confirm_pwd/',
-                {'pwd': pwd, 'c_pwd': c_pwd},
-                function (data) {
-                    if (data['flag']) {
-                        $('#c_pwd_info').html('');
-                        flag5 = true;
-                    } else {
-                        $('#c_pwd_info').html('两次密码不一致').css('color', 'red');
-                        flag5 = false;
-                    }
-                })
-        }
+    }
+    if ($('#confirm_pwd').val()) {
+        var c_pwd = $('#confirm_pwd').val();
+        $.getJSON(
+            '/account/confirm_pwd/',
+            {'pwd': pwd, 'c_pwd': c_pwd},
+            function (data) {
+                if (data['flag']) {
+                    $('#c_pwd_info').html('');
+                    flag4 = true;
+                } else {
+                    $('#c_pwd_info').html('两次密码不一致').css('color', 'red');
+                    flag4 = false;
+                }
+            })
     }
 });
 
 $('#confirm_pwd').blur(function () {
     var pwd = $('#check_pwd').val();
     var c_pwd = $(this).val();
-    $.getJSON(
-        '/account/confirm_pwd/',
-        {'pwd': pwd, 'c_pwd': c_pwd},
-        function (data) {
-            if (data['flag']) {
-                $('#cpwd_info').html('');
-                flag5 = true;
-            } else {
-                $('#cpwd_info').html('两次密码不一致').css('color', 'red');
-                flag5 = false;
-            }
-        })
+    if (pwd === '' && c_pwd === '') {
+        flag4 = true;
+        $('#cpwd_info').html('');
+    } else {
+        $.getJSON(
+            '/account/confirm_pwd/',
+            {'pwd': pwd, 'c_pwd': c_pwd},
+            function (data) {
+                if (data['flag']) {
+                    $('#cpwd_info').html('');
+                    flag4 = true;
+                } else {
+                    $('#cpwd_info').html('两次密码不一致').css('color', 'red');
+                    flag4 = false;
+                }
+            })
+    }
 });
-
-$('#check_identity').blur(function () {
-    var identity = $(this).val();
-    $.getJSON(
-        '/account/check_identity/',
-        {'identity': identity},
-        function (data) {
-            if (data['flag']) {
-                $('#identity_info').html('');
-                flag2 = true;
-            } else {
-                $('#identity_info').html('身份证号格式不正确').css('color', 'red');
-                flag2 = false;
-            }
-        }
-    )
-});
-
-$('#check_account').blur(function () {
-    var account = $(this).val();
-    $.getJSON(
-        '/account/check_account/',
-        {'account': account},
-        function (data) {
-            if (data['flag']) {
-                $('#account_info').html('');
-                flag3 = true;
-            } else {
-                $('#account_info').html('账号格式不正确').css('color', 'red');
-                flag3 = false;
-            }
-        }
-    )
-});
-
 
 $('#check_tel').blur(function () {
     var tel = $(this).val();
@@ -150,20 +120,164 @@ $('#check_tel').blur(function () {
         function (data) {
             if (data['flag']) {
                 $('#tel_info').html('');
-                flag6 = true;
+                flag5 = true;
             } else {
                 $('#tel_info').html('电话号码格式不正确').css('color', 'red');
-                flag6 = false;
+                flag5 = false;
             }
         }
     )
+
 });
 
+$('#check_r_identity').blur(function () {
+    var identity = $(this).val();
+    if (identity === '') {
+        flag6 = true;
+        $('#identity_info').html('');
+    } else {
+        $.getJSON(
+            '/account/check_identity/',
+            {'identity': identity},
+            function (data) {
+                if (data['flag']) {
+                    $('#identity_info').html('');
+                    flag6 = true;
+                } else {
+                    $('#identity_info').html('身份证号格式不正确').css('color', 'red');
+                    flag6 = false;
+                }
+            }
+        )
+    }
+});
+
+$('#check_email').blur(function () {
+    var email = $(this).val();
+    if (email === '') {
+        flag7 = true;
+        $('#email_info').html('');
+    } else {
+        $.getJSON(
+            '/account/check_email/',
+            {'email': email},
+            function (data) {
+                if (data['flag']) {
+                    $('#email_info').html('');
+                    flag7 = true;
+                } else {
+                    $('#email_info').html('身份证号格式不正确').css('color', 'red');
+                    flag7 = false;
+                }
+            }
+        )
+    }
+});
+
+$('#check_mailaddress').blur(function () {
+    var mailaddress = $(this).val();
+    if (mailaddress === '') {
+        flag8 = true;
+        $('#mailaddress_info').html('');
+    } else {
+        $.getJSON(
+            '/account/check_mailaddress/',
+            {'mailaddress': mailaddress},
+            function (data) {
+                if (data['flag']) {
+                    $('#mailaddress_info').html('');
+                    flag8 = true;
+                } else {
+                    $('#mailaddress_info').html('身份证号格式不正确').css('color', 'red');
+                    flag8 = false;
+                }
+            }
+        )
+    }
+});
+
+$('#check_zipcode').blur(function () {
+    var zipcode = $(this).val();
+    if (zipcode === '') {
+        flag9 = true;
+        $('#zipcode_info').html('');
+    } else {
+        $.getJSON(
+            '/account/check_zipcode/',
+            {'zipcode': zipcode},
+            function (data) {
+                if (data['flag']) {
+                    $('#zipcode_info').html('');
+                    flag9 = true;
+                } else {
+                    $('#zipcode_info').html('身份证号格式不正确').css('color', 'red');
+                    flag9 = false;
+                }
+            }
+        )
+    }
+});
+
+$('#check_qq').blur(function () {
+    var qq = $(this).val();
+    if (qq === '') {
+        flag10 = true;
+        $('#qq_info').html('');
+    } else {
+        $.getJSON(
+            '/account/check_qq/',
+            {'qq': qq},
+            function (data) {
+                if (data['flag']) {
+                    $('#qq_info').html('');
+                    flag10 = true;
+                } else {
+                    $('#qq_info').html('身份证号格式不正确').css('color', 'red');
+                    flag10 = false;
+                }
+            }
+        )
+    }
+});
 
 //保存成功的提示信息
 function save_modification() {
-    var flag;
+    var flag = flag1 && flag2 && flag3 && flag4 && flag5 && flag6 && flag7 && flag8 && flag9 && flag10;
+    if (flag) {
+        var a_id = $('#account_id').val();
+        var name = $('#check_name').val();
+        var pwd = $('#check_pwd').val();
+        var tel = $('#check_tel').val();
+        var identity = $('#check_r_identity').val();
+        var email = $('#check_email').val();
+        var mailaddress = $('#check_mailaddress').val();
+        var zipcode = $('#check_zipcode').val();
+        var qq = $('#check_qq').val();
 
+        if (identity === '') identity = '0';
+        if (email === '') email = '0';
+        if (mailaddress === '') mailaddress = '0';
+        if (zipcode === '') zipcode = '0';
+        if (qq === '') qq = '0';
+
+        $.getJSON(
+            '/account/save_modifications/',
+            {
+                'a_id': a_id,
+                'name': name,
+                'pwd': pwd,
+                'tel': tel,
+                'identity': identity,
+                'email': email,
+                'mailaddress': mailaddress,
+                'zipcode': zipcode,
+                'qq': qq
+            },
+            function () {
+                
+            }
+        )
+    }
 
     function showResult() {
         showResultDiv(true);

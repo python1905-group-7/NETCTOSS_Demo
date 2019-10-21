@@ -127,6 +127,10 @@ def account_modi(request):
     return render(request, 'NETCTOSS_Demo/main/account/account_modi.html', context=data)
 
 
+def save_modifications(request):
+    return JsonResponse({})
+
+
 def account_detail(request):
     data = {}
     real_name = request.session.get('real_name')

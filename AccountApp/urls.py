@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^add_user/', views.add_user, name='add_user'),
 
     url(r'^account_modi/', views.account_modi, name='account_modi'),
+    url(r'^save_modifications/', views.save_modifications, name='save_modifications'),
 
     url(r'^account_detail/', views.account_detail, name='account_detail'),
     url(r'^find_name/', views.find_name, name='find_name')
