@@ -17,6 +17,14 @@ def fee_modi(request):
     return render(request, 'NETCTOSS_Demo/main/fee/fee_modi.html')
 
 
+def fee_detail(request):
+    return render(request, 'NETCTOSS_Demo/main/fee/fee_detail.html')
+
+
+def fee_add(request):
+    return render(request, 'NETCTOSS_Demo/main/fee/fee_add.html')
+
+
 class AllCostView(View):
     def get(self, request):
         data = dict()
@@ -53,6 +61,31 @@ class CostView(View):
         return JsonResponse(data=data, json_dumps_params={'ensure_ascii': False})
 
 
+def add_cost(request):
+    values = dict()
+    data = {
+        'msg': '添加成功!',
+        'status': 200
+    }
+
+    try:
+        values = set_value(values, request)
+    except ValueError:
+        data['msg'] = '数据类型错误!'
+        data['status'] = 500
+
+    cost = Cost()
+    cost = set_cost(cost, values)
+    cost_name = Cost.objects.filter(name=cost.name)
+    if cost_name.exists():
+        data['msg'] = '资费名称重复!'
+        data['status'] = 501
+    else:
+        cost.save()
+
+    return JsonResponse(data=data)
+
+
 def update_to_cost_status(request):
     cost_id = int(request.GET.get('cost_id'))
     cost = Cost.objects.filter(id=cost_id)
@@ -74,14 +107,6 @@ def update_to_cost_status(request):
     return JsonResponse(data=data, json_dumps_params={'ensure_ascii': False})
 
 
-# {
-#     'name': $('#name').val(),
-#     'base_duration': $('#base_duration').val(),
-#     'base_cost': $('#base_cost').val(),
-#     'unit_cost': $('#unit_cost').val(),
-#     'descr': $('#descr').val(),
-#     'cost_type': $('input[name="radFeeType"]:checked').val()
-# }
 def update_to_cost(request):
     values = dict()
     data = {
@@ -91,17 +116,7 @@ def update_to_cost(request):
 
     try:
         values['id'] = int(request.GET.get('id'))
-        values['name'] = request.GET.get('name')
-        values['descr'] = request.GET.get('descr')
-        values['cost_type'] = request.GET.get('cost_type')
-        if values['cost_type'] == '1':
-            values['base_cost'] = float(request.GET.get('base_cost'))
-        elif values['cost_type'] == '2':
-            values['base_duration'] = request.GET.get('base_duration')
-            values['base_cost'] = float(request.GET.get('base_cost'))
-            values['unit_cost'] = float(request.GET.get('unit_cost'))
-        elif values['cost_type'] == '3':
-            values['unit_cost'] = float(request.GET.get('unit_cost'))
+        values = set_value(values, request)
     except ValueError:
         data['msg'] = '数据类型错误!'
         data['status'] = 500
@@ -111,13 +126,14 @@ def update_to_cost(request):
     if cost.exists():
         cost = cost.first()
         cost.name = values.get('name')
-        cost.cost_type = values.get('cost_type')
-        cost.base_duration = values.get('base_duration')
-        cost.base_cost = values.get('base_cost')
-        cost.unit_cost = values.get('unit_cost')
-        cost.descr = values.get('descr')
+        cost = set_cost(cost, values)
 
-        cost.save()
+        cost_name = Cost.objects.filter(name=cost.name)
+        if cost_name.exists():
+            data['msg'] = '资费名称重复!'
+            data['status'] = 501
+        else:
+            cost.save()
     else:
         data['msg'] = '没有该资费的信息!'
         data['status'] = 404
@@ -142,3 +158,30 @@ def delete_to_cost(request):
         data['status'] = 404
 
     return JsonResponse(data=data, json_dumps_params={'ensure_ascii': False})
+
+
+def set_value(values, request):
+    values['name'] = request.GET.get('name')
+    values['descr'] = request.GET.get('descr')
+    values['cost_type'] = request.GET.get('cost_type')
+    if values['cost_type'] == '1':
+        values['base_cost'] = float(request.GET.get('base_cost'))
+    elif values['cost_type'] == '2':
+        values['base_duration'] = request.GET.get('base_duration')
+        values['base_cost'] = float(request.GET.get('base_cost'))
+        values['unit_cost'] = float(request.GET.get('unit_cost'))
+    elif values['cost_type'] == '3':
+        values['unit_cost'] = float(request.GET.get('unit_cost'))
+
+    return values
+
+
+def set_cost(cost, values):
+    cost.name = values.get('name')
+    cost.cost_type = values.get('cost_type')
+    cost.base_duration = values.get('base_duration')
+    cost.base_cost = values.get('base_cost')
+    cost.unit_cost = values.get('unit_cost')
+    cost.descr = values.get('descr')
+
+    return cost

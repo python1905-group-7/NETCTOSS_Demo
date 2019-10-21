@@ -35,7 +35,16 @@
 <!--导航区域结束-->
 <!--主要区域开始-->
 <div id="main">
-    <div id="save_result_info" class="save_success">保存成功！</div>
+    <div id="save_result_info" class="save_success save_result_info1">保存成功！</div>
+    <div id="save_result_info" class="save_fail save_result_info2">保存失败，基本时长格式不规范！</div>
+    <div id="save_result_info" class="save_fail save_result_info3">保存失败，基本费用格式不规范！</div>
+    <div id="save_result_info" class="save_fail save_result_info4">保存失败，单位费用格式不规范！</div>
+    <div id="save_result_info" class="save_fail save_result_info5">保存失败，资费名称重复！</div>
+    <div id="save_result_info" class="save_fail save_result_info6">保存失败，资费名称不能为空！</div>
+    <div id="save_result_info" class="save_fail save_result_info7">保存失败，资费类型不能为空！</div>
+    <div id="save_result_info" class="save_fail save_result_info8">保存失败，基本时长不能为空！</div>
+    <div id="save_result_info" class="save_fail save_result_info9">保存失败，基本费用不能为空！</div>
+    <div id="save_result_info" class="save_fail save_result_info10">保存失败，单位费用不能为空！</div>
 
     <form class="main_form">
         <div class="text_info clearfix">
@@ -66,7 +75,7 @@
             <input type="radio" name="radFeeType" id="monthly" value="1" onclick="feeTypeChange(1);"/>
             <label for="monthly">包月</label>
 
-            <input type="radio" name="radFeeType" id="package" value="2" onclick="feeTypeChange(2);" checked="checked"/>
+            <input type="radio" name="radFeeType" id="package" value="2" onclick="feeTypeChange(2);"/>
             <label for="package">套餐</label>
 
             <input type="radio" name="radFeeType" id="timeBased" value="3" onclick="feeTypeChange(3);"/>
@@ -78,7 +87,7 @@
         <div class="text_info clearfix"><span>基本时长：</span></div>
         <div class="input_info">
 
-            <input id="base_duration" type="text" value="" class="width100" oninput="value=value.replace(/[^\d]/g,'')"/>
+            <input id="base_duration" type="text" value="" class="width100" oninput="set_base_duration(this)"/>
 
             <span class="info">小时</span>
             <span class="required">*</span>
@@ -89,7 +98,7 @@
         <div class="text_info clearfix"><span>基本费用：</span></div>
         <div class="input_info">
 
-            <input id="base_cost" type="text" value="" class="width100" oninput="value=value.replace(/[^\d]/g,'')"/>
+            <input id="base_cost" type="text" value="" class="width100" oninput="set_price(this)"/>
 
             <span class="info">元</span>
             <span class="required">*</span>
@@ -100,7 +109,7 @@
         <div class="text_info clearfix"><span>单位费用：</span></div>
         <div class="input_info">
 
-            <input id="unit_cost" type="text" value="" class="width100" oninput="value=value.replace(/[^\d]/g,'')"/>
+            <input id="unit_cost" type="text" value="" class="width100" oninput="set_price(this)"/>
 
             <span class="info">元/小时</span>
             <span class="required">*</span>
@@ -119,7 +128,7 @@
 
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>
-            <input type="button" value="取消" class="btn_save" onclick="location.href = '/fee/fee_list'"/>
+            <input type="button" value="返回" class="btn_save" onclick="location.href = '/fee/fee_list'"/>
         </div>
     </form>
 </div>

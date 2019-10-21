@@ -41,7 +41,7 @@ function set_datalist(data) {
                 '<input type="button" value="删除" class="btn_delete" onclick="deleteFee(' + i + ', ' + data[i]['id'] + ');"/>\n';
             trs += '<tr>\n' +
                 '<td>' + data[i]['id'] + '</td>\n' +
-                '<td><a href="fee_detail.html">' + data[i]['name'] + '</a></td>\n' +
+                '<td><a href="/fee/fee_detail?cost_id=' + data[i]['id'] + '">' + data[i]['name'] + '</a></td>\n' +
                 '<td>' + (data[i]['base_duration'] ? data[i]['base_duration'] + ' 小时' : '') + '</td>\n' +
                 '<td>' + (data[i]['base_cost'] ? data[i]['base_cost'] + ' 元' : '') + '</td>\n' +
                 '<td>' + (data[i]['unit_cost'] ? data[i]['unit_cost'] + ' 元/小时' : '') + '</td>\n' +

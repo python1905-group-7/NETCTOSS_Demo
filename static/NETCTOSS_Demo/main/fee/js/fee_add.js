@@ -1,42 +1,8 @@
-let cost;
 let className = '';
-$(function () {
-    init()
-});
-
-function init() {
-    let cost_id = get_cost_id();
-
-    $.get(
-        '/fee/get_cost',
-        {'cost_id': cost_id},
-        function (data) {
-            if (data['status'] === 200) {
-                cost = data['data'];
-                set_form(cost);
-            } else {
-                window.location.href = '/fee/fee_list/'
-            }
-        }
-    )
-}
-
-function set_form(data) {
-    $('#id').val(data['id']);
-    $('#name').val(data['name']);
-    let radio_id = get_radio_id(data)
-    $(radio_id).attr('checked', 'checked');
-    $('#base_duration').val(data['base_duration']);
-    $('#base_cost').val(data['base_cost']);
-    $('#unit_cost').val(data['unit_cost']);
-    feeTypeChange(parseInt(data['cost_type']));
-    $('#descr').val(data['descr'])
-}
 
 //保存结果的提示
 function showResult() {
     let value = {
-        'id': cost['id'],
         'name': $('#name').val(),
         'base_duration': $('#base_duration').val(),
         'base_cost': $('#base_cost').val(),
@@ -94,17 +60,17 @@ function showResult() {
             }
         } else {
             $.get(
-                '/fee/update_to_cost/',
+                '/fee/add_cost/',
                 value,
                 function (data) {
                     if (data['status'] === 200) {
                         className = 'save_result_info1';
                         showResultDiv(true, className);
-                        window.setTimeout("showResultDiv(false, className);", 3000);
+                        window.setTimeout("showResultDiv(false, 'save_result_info1');", 3000);
                     } else if (data['status'] === 501) {
                         className = 'save_result_info5';
                         showResultDiv(true, className);
-                        window.setTimeout("showResultDiv(false, className);", 3000);
+                        window.setTimeout("showResultDiv(false, 'save_result_info5');", 3000);
                     }
                 }
             );
@@ -112,8 +78,8 @@ function showResult() {
     }
 }
 
-function showResultDiv(flag, id) {
-    let divResult = document.getElementsByClassName(id)[0];
+function showResultDiv(flag, className) {
+    let divResult = document.getElementsByClassName(className)[0];
     if (flag)
         divResult.style.display = "block";
     else
