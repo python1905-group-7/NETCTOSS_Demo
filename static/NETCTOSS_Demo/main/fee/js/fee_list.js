@@ -18,6 +18,7 @@ function init() {
             set_pages(1)
         }
     )
+
 }
 
 function set_datalist(data) {
@@ -36,7 +37,7 @@ function set_datalist(data) {
     for (let i = (page_num - 1) * page_size; i < page_num * page_size; i++) {
         if (data[i]) {
             let btns = '<input type="button" value="启用" class="btn_start" onclick="startFee(' + i + ', ' + data[i]['id'] + ');"/>\n' +
-                '<input type="button" value="修改" class="btn_modify" onclick="location.href=\'fee_modi.html\';"/>\n' +
+                '<input type="button" value="修改" class="btn_modify" onclick="location.href=\'/fee/fee_modi?cost_id=' + data[i]['id'] + '\';"/>\n' +
                 '<input type="button" value="删除" class="btn_delete" onclick="deleteFee(' + i + ', ' + data[i]['id'] + ');"/>\n';
             trs += '<tr>\n' +
                 '<td>' + data[i]['id'] + '</td>\n' +

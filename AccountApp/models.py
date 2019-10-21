@@ -54,18 +54,3 @@ class Account(models.Model):
     def get(self):
         return [self.id, self.real_name, self.idcard_no, self.login_name, self.status, self.create_date,
                 self.last_login_time]
-
-
-class Cost(models.Model):
-    name = models.CharField(max_length=64)
-    base_duration = models.IntegerField()
-    base_cost = models.FloatField()
-    unit_cost = models.FloatField()
-    status = models.NullBooleanField()
-    descr = models.CharField(max_length=256)
-    creatime = models.DateTimeField(auto_now=True)
-    startime = models.DateTimeField(null=True)
-    cost_type = models.CharField(max_length=16)
-
-    class Meta:
-        db_table = 'cost'
