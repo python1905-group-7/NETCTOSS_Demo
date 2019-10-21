@@ -56,6 +56,7 @@ $('#check_account').blur(function () {
     )
 });
 
+
 $('#check_pwd').blur(function () {
     var pwd = $(this).val();
     $.getJSON(
@@ -87,7 +88,6 @@ $('#check_pwd').blur(function () {
             })
     }
 });
-
 
 $('#confirm_pwd').blur(function () {
     var pwd = $('#check_pwd').val();

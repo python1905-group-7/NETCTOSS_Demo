@@ -17,7 +17,7 @@ class Account(models.Model):
     # 密码
     login_passwd = models.CharField(max_length=256)
     # 账号状态
-    status = models.CharField(max_length=4, default=1)
+    status = models.CharField(max_length=4, default='1')
     # 账号创建时间
     create_date = models.DateTimeField(auto_now_add=True)
     # 账号暂停时间

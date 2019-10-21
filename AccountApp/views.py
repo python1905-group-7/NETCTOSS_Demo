@@ -24,28 +24,37 @@ def judge(res):
 
 def check_name(request):
     name = request.GET.get('name')
-    res = re.match(r'[\u4e00-\u9fa5a-zA-Z0-9]{1,20}', name)
+    res = re.match(r'[\u4e00-\u9fa5a-zA-Z0-9]{1,20}$', name)
     flag = judge(res)
     return JsonResponse({'flag': flag})
 
 
 def check_identity(request):
     identity = request.GET.get('identity')
-    res = re.match(r'', identity)
+    res = re.match(r'^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$',
+                   identity)
     flag = judge(res)
     return JsonResponse({'flag': flag})
 
 
 def check_account(request):
     account = request.GET.get('account')
-    res = re.match(r'[a-zA-Z0-9_]{1,30}', account)
+    res = re.match(r'[a-zA-Z0-9_]{1,30}$', account)
     flag = judge(res)
+    return JsonResponse({'flag': flag})
+
+
+def check_old_pwd(request):
+    o_pwd = request.GET.get('o_pwd')
+    a_id = int(request.GET.get('a_id'))
+    pwd = Account.objects.get(pk=a_id)
+    flag = o_pwd == pwd
     return JsonResponse({'flag': flag})
 
 
 def check_pwd(request):
     pwd = request.GET.get('pwd')
-    res = re.match(r'[a-zA-Z0-9_]{6,16}', pwd)
+    res = re.match(r'[a-zA-Z0-9_]{6,16}$', pwd)
     flag = judge(res)
     return JsonResponse({'flag': flag})
 
@@ -59,7 +68,35 @@ def confirm_pwd(request):
 
 def check_tel(request):
     tel = request.GET.get('tel')
-    res = re.match(r'\d{11}', tel)
+    res = re.match(r'\d{11}$', tel)
+    flag = judge(res)
+    return JsonResponse({'flag': flag})
+
+
+def check_email(request):
+    email = request.GET.get('email')
+    res = re.match(r'^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$', email)
+    flag = judge(res)
+    return JsonResponse({'flag': flag})
+
+
+def check_mailaddress(request):
+    mailaddress = request.GET.get('mailaddress')
+    res = re.match(r'\d{1,50}$', mailaddress)
+    flag = judge(res)
+    return JsonResponse({'flag': flag})
+
+
+def check_zipcode(request):
+    zipcode = request.GET.get('zipcode')
+    res = re.match(r'\d{6}$', zipcode)
+    flag = judge(res)
+    return JsonResponse({'flag': flag})
+
+
+def check_qq(request):
+    qq = request.GET.get('qq')
+    res = re.match(r'\d{5,13}$', qq)
     flag = judge(res)
     return JsonResponse({'flag': flag})
 
@@ -96,8 +133,8 @@ def account_detail(request):
     if real_name:
         account = Account.objects.filter(real_name=real_name)[0]
         if account.recommender_id:
-            r_id = Recommender.objects.get(account.recommender_id).id
-            r_idcard_no = Recommender.objects.get(account.recommender_id).idcard_no
+            r_id = Recommender.objects.get(pk=account.recommender_id).id
+            r_idcard_no = Recommender.objects.get(pk=account.recommender_id).idcard_no
         else:
             r_id = ''
             r_idcard_no = ''
