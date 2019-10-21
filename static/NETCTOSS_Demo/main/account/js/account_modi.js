@@ -19,46 +19,46 @@ $('#check_name').blur(function () {
                 $('#name_info').html('');
                 flag1 = true;
             } else {
-                $('#name_info').html('姓名格式不正确').css('color', 'red');
+                $('#name_info').html('用户名格式不正确').css('color', 'red');
                 flag1 = false;
             }
         }
-    );
+    )
 });
 
-
-$('#old_pwd').blur(function () {
+$('#check_old_pwd').blur(function () {
     var o_pwd = $(this).val();
-    if (o_pwd !== '') {
-        var account_id = $('#account_id').val();
+    if (o_pwd === '') {
+        flag2 = true;
+        $('#old_pwd_info').html('');
+    } else {
+        var a_id = $('#account_id').val();
         $.getJSON(
             '/account/check_old_pwd/',
-            {'account_id': account_id, 'o_pwd': o_pwd},
+            {'a_id': a_id, 'o_pwd': o_pwd},
             function (data) {
                 if (data['flag']) {
                     $('#old_pwd_info').html('');
-                    $('#new_pwd').removeAttr('disabled');
+                    $('#check_new_pwd').removeAttr('disabled');
                     $('#confirm_pwd').removeAttr('disabled');
                     flag2 = true;
                 } else {
                     $('#old_pwd_info').html('密码不正确').css('color', 'red');
-                    $('#new_pwd').attr('disabled', 'disabled');
+                    $('#check_new_pwd').attr('disabled', 'disabled');
                     $('#confirm_pwd').attr('disabled', 'disabled');
                     flag2 = false;
                 }
             }
-        )
-    } else {
-        $('#old_pwd_info').html('');
-        $('#new_pwd').attr('disabled', 'disabled');
-        $('#confirm_pwd').attr('disabled', 'disabled');
-        flag2 = true;
+        );
     }
 });
 
-$('#new_pwd').blur(function () {
+$('#check_new_pwd').blur(function () {
     var pwd = $(this).val();
-    if (pwd !== '') {
+    if (pwd === '') {
+        flag3 = true;
+        $('#new_pwd_info').html('');
+    } else {
         $.getJSON(
             '/account/check_pwd/',
             {'pwd': pwd},
@@ -72,47 +72,43 @@ $('#new_pwd').blur(function () {
                 }
             }
         );
-    } else {
-        flag3 = true;
-        $('#new_pwd_info').html('');
     }
-    if ($('#confirm_pwd').val()) {
+    if ($('#confirm_pwd').val() === '') {
         var c_pwd = $('#confirm_pwd').val();
         $.getJSON(
             '/account/confirm_pwd/',
             {'pwd': pwd, 'c_pwd': c_pwd},
             function (data) {
                 if (data['flag']) {
-                    $('#confirm_pwd_info').html('');
+                    $('#c_pwd_info').html('');
                     flag4 = true;
                 } else {
-                    $('#confirm_pwd_info').html('两次密码不一致').css('color', 'red');
+                    $('#c_pwd_info').html('两次密码不一致').css('color', 'red');
                     flag4 = false;
                 }
             })
     }
 });
 
-
 $('#confirm_pwd').blur(function () {
-    var pwd = $('#new_pwd').val();
+    var pwd = $('#check_new_pwd').val();
     var c_pwd = $(this).val();
     if (pwd === '' && c_pwd === '') {
         flag4 = true;
-        $('#confirm_pwd_info').html('');
+        $('#c_pwd_info').html('');
     } else {
         $.getJSON(
             '/account/confirm_pwd/',
             {'pwd': pwd, 'c_pwd': c_pwd},
             function (data) {
                 if (data['flag']) {
-                    $('#confirm_pwd_info').html('');
+                    $('#c_pwd_info').html('');
                     flag4 = true;
                 } else {
-                    $('#confirm_pwd_info').html('两次密码不一致').css('color', 'red');
+                    $('#c_pwd_info').html('两次密码不一致').css('color', 'red');
                     flag4 = false;
                 }
-            });
+            })
     }
 });
 
@@ -130,34 +126,38 @@ $('#check_tel').blur(function () {
                 flag5 = false;
             }
         }
-    );
+    )
+
 });
 
 $('#check_r_identity').blur(function () {
     var identity = $(this).val();
-    if (identity !== '') {
+    if (identity === '') {
+        flag6 = true;
+        $('#identity_info').html('');
+    } else {
         $.getJSON(
             '/account/check_identity/',
             {'identity': identity},
             function (data) {
                 if (data['flag']) {
-                    $('#r_identity_info').html('');
+                    $('#identity_info').html('');
                     flag6 = true;
                 } else {
-                    $('#r_identity_info').html('身份证号格式不正确').css('color', 'red');
+                    $('#identity_info').html('身份证号格式不正确').css('color', 'red');
                     flag6 = false;
                 }
             }
-        );
-    } else {
-        flag6 = true;
-        $('#r_identity_info').html('');
+        )
     }
 });
 
 $('#check_email').blur(function () {
     var email = $(this).val();
-    if (email !== '') {
+    if (email === '') {
+        flag7 = true;
+        $('#email_info').html('');
+    } else {
         $.getJSON(
             '/account/check_email/',
             {'email': email},
@@ -170,16 +170,16 @@ $('#check_email').blur(function () {
                     flag7 = false;
                 }
             }
-        );
-    } else {
-        flag7 = true;
-        $('#email_info').html('');
+        )
     }
 });
 
 $('#check_mailaddress').blur(function () {
     var mailaddress = $(this).val();
-    if (mailaddress !== '') {
+    if (mailaddress === '') {
+        flag8 = true;
+        $('#mailaddress_info').html('');
+    } else {
         $.getJSON(
             '/account/check_mailaddress/',
             {'mailaddress': mailaddress},
@@ -188,20 +188,20 @@ $('#check_mailaddress').blur(function () {
                     $('#mailaddress_info').html('');
                     flag8 = true;
                 } else {
-                    $('#mailaddress_info').html('通信地址格式不正确').css('color', 'red');
+                    $('#mailaddress_info').html('邮箱地址格式不正确').css('color', 'red');
                     flag8 = false;
                 }
             }
-        );
-    } else {
-        flag8 = true;
-        $('#mailaddress_info').html('');
+        )
     }
 });
 
 $('#check_zipcode').blur(function () {
     var zipcode = $(this).val();
-    if (zipcode !== '') {
+    if (zipcode === '') {
+        flag9 = true;
+        $('#zipcode_info').html('');
+    } else {
         $.getJSON(
             '/account/check_zipcode/',
             {'zipcode': zipcode},
@@ -214,16 +214,16 @@ $('#check_zipcode').blur(function () {
                     flag9 = false;
                 }
             }
-        );
-    } else {
-        flag9 = true;
-        $('#zipcode_info').html('');
+        )
     }
 });
 
 $('#check_qq').blur(function () {
     var qq = $(this).val();
-    if (qq !== '') {
+    if (qq === '') {
+        flag10 = true;
+        $('#qq_info').html('');
+    } else {
         $.getJSON(
             '/account/check_qq/',
             {'qq': qq},
@@ -232,54 +232,60 @@ $('#check_qq').blur(function () {
                     $('#qq_info').html('');
                     flag10 = true;
                 } else {
-                    $('#qq_info').html('QQ格式不正确').css('color', 'red');
+                    $('#qq_info').html('QQ号格式不正确').css('color', 'red');
                     flag10 = false;
                 }
             }
-        );
-    } else {
-        flag10 = true;
-        $('#qq_info').html('');
+        )
     }
 });
 
-//保存成功的提示信息
-function showResult() {
+function save_modification() {
     var flag = flag1 && flag2 && flag3 && flag4 && flag5 && flag6 && flag7 && flag8 && flag9 && flag10;
     if (flag) {
         var a_id = $('#account_id').val();
         var name = $('#check_name').val();
+        var pwd = $('#check_new_pwd').val();
         var tel = $('#check_tel').val();
-        var r_identity = $('#check_r_identity').val();
+        var identity = $('#check_r_identity').val();
         var email = $('#check_email').val();
         var mailaddress = $('#check_mailaddress').val();
         var zipcode = $('#check_zipcode').val();
         var qq = $('#check_qq').val();
-        if (r_identity === '') r_identity = '0';
+
+        if (pwd === '') pwd = '0';
+        if (identity === '') identity = '0';
         if (email === '') email = '0';
         if (mailaddress === '') mailaddress = '0';
         if (zipcode === '') zipcode = '0';
         if (qq === '') qq = '0';
+
         $.getJSON(
-            '/account/modify_user/',
+            '/account/save_modifications/',
             {
-                'account_id': a_id,
+                'a_id': a_id,
                 'name': name,
+                'pwd': pwd,
                 'tel': tel,
-                'r_identity': r_identity,
+                'identity': identity,
                 'email': email,
                 'mailaddress': mailaddress,
                 'zipcode': zipcode,
                 'qq': qq
             },
-            function (data) {
+            function () {
                 location.href = '/account/account_list/'
             }
         )
     } else {
-        showResultDiv(true);
-        window.setTimeout("showResultDiv(false);", 5000);
+        showResult()
     }
+}
+
+//保存成功的提示信息
+function showResult() {
+    showResultDiv(true);
+    window.setTimeout("showResultDiv(false);", 5000);
 }
 
 function showResultDiv(flag) {

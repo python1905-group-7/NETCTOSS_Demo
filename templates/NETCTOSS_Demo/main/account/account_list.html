@@ -1,14 +1,12 @@
 ﻿{% extends 'base_main.html' %}
+
 {% load static %}
-{% block ext_js %}
-    {{ block.super }}
-    <script type="text/javascript" src="{% static 'NETCTOSS_Demo/main/account/js/account.js' %}"></script>
-{% endblock %}
+
 {% block content %}
     {{ block.super }}
     <!--主要区域开始-->
     <div id="main">
-        <form action="" method="">
+        <form>
             <!--查询-->
             <div class="search_add">
                 <div>身份证：<input type="text" name="idcard" value="" class="text_search"/></div>
@@ -24,7 +22,7 @@
                     </select>
                 </div>
                 <div><input type="button" value="搜索" class="btn_search"/></div>
-                <input type="button" value="增加" class="btn_add" onclick="location.href='/account/account_add';"/>
+                <input type="button" value="增加" class="btn_add" onclick="location.href='/account/account_add/';"/>
             </div>
 
             <!--数据区域：用表格展示数据-->
@@ -120,8 +118,29 @@
         </form>
     </div>
     <!--主要区域结束-->
+{% endblock %}
+
+{% block footer %}
     <div id="footer">
 
     </div>
+{% endblock %}
 
+{% block ext_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'NETCTOSS_Demo/main/account/js/account.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NETCTOSS_Demo/main/account/js/account_list.js' %}"></script>
+    <script language="javascript" type="text/javascript">
+        //删除
+        function deleteAccount() {
+            var r = window.confirm("确定要删除此账务账号吗？\r\n删除后将不能恢复，且会删除其下属的所有业务账号。");
+            document.getElementById("operate_result_info").style.display = "block";
+        }
+
+        //开通或暂停
+        function setState() {
+            var r = window.confirm("确定要开通此账务账号吗？");
+            document.getElementById("operate_result_info").style.display = "block";
+        }
+    </script>
 {% endblock %}
