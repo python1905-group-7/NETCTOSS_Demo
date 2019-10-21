@@ -84,7 +84,8 @@ $(function () {
         );
 
     });
-    })
+
+
     $(".btn_search").click(function () {
         var os_username = $(".text_search1").val()
         var unix_host = $(".text_search2").val()
@@ -101,7 +102,7 @@ $(function () {
             function (data) {
                 if (data['status'] === 200) {
 
-                    window.location.href = "/service/test/"
+                    window.location.href = "/service/service_list/"
                 }
             }
         )

@@ -59,7 +59,7 @@
                     {% for service in s_page.object_list %}
 
                     <tr>
-                        <td><a href="service_detail.html" title="查看明细">{{ service.id }}</a></td>
+                        <td><a href="{% url 'service:service_detail'%}?sid={{ service.id }}" title="查看明细">{{ service.id }}</a></td>
                         <td>{{service.account.id}}</td>
                         <td>{{service.account.idcard_no}}</td>
                         <td>{{service.account.real_name}}</td>
@@ -94,53 +94,6 @@
 
                         </td>
                     </tr>
-                        <tr>
-                            <td id="to_service_list"><a href="{% url 'service:service_detail' %}?sid={{ service.id }}">{{ service.id }}</a></td>
-                            <td>{{ service.account.id }}</td>
-                            <td>{{ service.account.idcard_no }}</td>
-                            <td>{{ service.account.real_name }}</td>
-                            <td>{{service.os_username}}</td>
-                            <td>
-                                {% if service.status == 1%}
-                                    开通
-                                {% elif service.status == 0 %}
-                                    暂停
-                                {% elif service.status == None %}
-                                    删除
-                                {% endif %}
-                            </td>
-                            <td>{{ service.unix_host }}</td>
-                            <td>
-                                {% if service.cost.cost_type == '1' %}
-                                    <a class="summary" onmouseover="showDetail(true,this);"
-                                       onmouseout="showDetail(false,this);">包{{ service.cost.base_duration }}小时</a>
-                                    <!--浮动的详细信息-->
-                                    <div class="detail_info">
-                                        {{ service.cost.dercr }}
-                                    </div>
-                                {% elif service.cost.cost_type == '2' %}
-                                    <a class="summary" onmouseover="showDetail(true,this);"
-                                       onmouseout="showDetail(false,this);">包{{ service.cost.base_duration }}</a>
-                                    <!--浮动的详细信息-->
-                                    <div class="detail_info">
-                                        {{ service.cost.dercr }}
-                                    </div>
-                                {% elif service.cost.cost_type == '3' %}
-                                    <a class="summary" onmouseover="showDetail(true,this);"
-                                       onmouseout="showDetail(false,this);">包{{ service.cost.base_duration }}</a>
-                                    <!--浮动的详细信息-->
-                                    <div class="detail_info">
-                                        {{ service.cost.dercr }}
-                                    </div>
-                                {% endif %}
-
-                            </td>
-                            <td class="td_modi" sid="{{ service.id }}">
-                                <input type="button" value="暂停" class="btn_pause"/>
-                                <input type="button" value="修改" class="btn_modify"/>
-                                <input type="button" value="删除" class="btn_delete"/>
-                            </td>
-                        </tr>
                     {% endfor %}
                 </table>
                 <p>业务说明：<br />
@@ -163,7 +116,11 @@
                     {% endif %}
 
                     {% for page in pagin.page_range %}
-                         <a href="{% url 'service:service_list' %}?page={{ page }}" class="current_page">{{ page }}</a>
+                        {% if page == pages %}
+                        <a href="{% url 'service:service_list' %}?page={{ page }}" class="current_page">{{ page }}</a>
+                        {% else %}
+                         <a href="{% url 'service:service_list' %}?page={{ page }}" >{{ page }}</a>
+                        {% endif %}
                     {% endfor %}
 
                     {% if s_page.has_next %}

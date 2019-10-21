@@ -67,12 +67,11 @@ def service_list(request):
     per_page=request.GET.get('per_page',5)
     #实例Praginator对象
     pagin = Paginator(service_list,per_page)
-
     pages=pagin.page(page)
-    p = pagin.page(page)
     context={
         's_page':pages,
         'pagin':pagin,
+        'pages':int(page)
     }
     return render(request, 'NETCTOSS_Demo/main/service/service_list.html', context=context)
 
@@ -222,7 +221,7 @@ def add_service(request):
 
     if account.count() > 0:
 
-        services = Service.objects.filter(account=account)
+        services = Service.objects.filter(account_id=accountid)
 
         if services.filter(status=True).count()>0 :
             service = Service()
